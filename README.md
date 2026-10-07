@@ -56,7 +56,7 @@ Optional `CHROMIUM_PATH=/pfad/zu/chromium npm run test:ui`. Stand 2026-10-07: ne
 
 ## ChatGPT verbinden und einreichen
 
-Offizielle Apps-SDK-URLs führen am Prüfdatum zur **neuen Plugins-Dokumentation**. Gemeint ist MCP + MCP Apps, nicht das alte `ai-plugin.json`-/OpenAPI-Plugins-Format. Verwendete Versionen: `@modelcontextprotocol/sdk 1.32.1`, `@modelcontextprotocol/ext-apps 2.0.3`, `zod 4.6.5`; UI ohne zusätzliches Framework. Prüfung der offiziellen Dokumentation und npm-Versionen am **2026-10-07, ca. 15:56–16:15 UTC**. [Quellenstand](docs/PLATFORM.md), [Architektur](docs/ARCHITECTURE.md).
+Offizielle Apps-SDK-URLs führen am Prüfdatum zur **neuen Plugins-Dokumentation**. Gemeint ist MCP + MCP Apps, nicht das alte `ai-plugin.json`-/OpenAPI-Plugins-Format. Verwendete Versionen: `@modelcontextprotocol/sdk 1.32.1`, `@modelcontextprotocol/ext-apps 2.0.3`, `zod 4.6.5`; UI ohne zusätzliches Framework. Prüfung der offiziellen Dokumentation und npm-Versionen am **2026-10-07, ca. 15:56–16:11 UTC**. [Quellenstand](docs/PLATFORM.md), [Architektur](docs/ARCHITECTURE.md).
 
 Ein echter ChatGPT-/Entwicklermodus-Test wurde **nicht durchgeführt**: kein verbundenes ChatGPT-Testkonto, keine Tunnelidentität, kein HTTPS-Endpunkt. Die offizielle aktuelle Oberfläche beschreibt „ChatGPT Plugins → Add custom MCP server“. Ein Secure MCP Tunnel ist für private Entwicklung möglich, benötigt jedoch `tunnel_id`, Laufzeit-API-Key und Workspace-/Tunnel-Berechtigungen. Keine Schlüssel hier einfügen. Produktive Nutzung braucht zuerst OAuth und stabile Nutzeridentitäten. Öffentliche Einreichung benötigt zusätzlich einen stabilen öffentlichen HTTPS-Endpunkt; ein privater Tunnel genügt nicht. [Einreichungscheckliste](submission/CHECKLIST.md).
 

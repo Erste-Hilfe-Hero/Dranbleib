@@ -1,6 +1,6 @@
 # Offizieller Quellenstand
 
-Prüfung: 2026-10-07 ca. 15:56–16:15 UTC. Systemdatum und Live-Abruf; vollständige öffentlich zugängliche Markdown-Quellen als `*.source.md` in diesem Ordner gespeichert. Keine Konto- oder Sitzungsschlüssel darin. Versionen live mit `npm view` geprüft, exakt im Lockfile fixiert: MCP SDK 1.32.1, MCP Apps Helpers 2.0.3, Zod 4.6.5; Testwerkzeug Playwright 1.63.0, Node-Laufzeit 24.19.0. „Apps SDK“ ist hier der Plattform-/MCP-Apps-Vertrag, kein erfundenes npm-Paket.
+Prüfung: 2026-10-07 ca. 15:56–16:11 UTC. Systemdatum und Live-Abruf; vollständige öffentlich zugängliche Markdown-Quellen als `*.source.md` in diesem Ordner gespeichert. Keine Konto- oder Sitzungsschlüssel darin. Versionen live mit `npm view` geprüft, exakt im Lockfile fixiert: MCP SDK 1.32.1, MCP Apps Helpers 2.0.3, Zod 4.6.5; Testwerkzeug Playwright 1.63.0, Node-Laufzeit 24.19.0. „Apps SDK“ ist hier der Plattform-/MCP-Apps-Vertrag, kein erfundenes npm-Paket.
 
 | Thema | Offizielle Quelle | Entscheidung |
 |---|---|---|
