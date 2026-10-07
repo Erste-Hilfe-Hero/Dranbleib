@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "dranbleib": {
+      "type": "streamable-http",
+      "url": "<PUBLIC_HTTPS_MCP_URL>"
+    }
+  }
+}
