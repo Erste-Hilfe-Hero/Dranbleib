@@ -65,3 +65,5 @@ Ein echter ChatGPT-/Entwicklermodus-Test wurde **nicht durchgeführt**: kein ver
 ## Git- und Veröffentlichungsstatus
 
 Neues lokales Repository, Branch `main`, Checkpoint-Commits vorhanden. Kein Git-Remote konfiguriert; **nicht gepusht**. GitHub-Zugriff/Remote muss vom Nutzer für dieses Projekt verbunden und autorisiert werden. Kein Hosting eingerichtet, keine Kosten ausgelöst, nicht eingereicht und nicht veröffentlicht. OpenAI-Entwicklerverifizierung, Produktions-OAuth, rechtliche Angaben, Testkonto und endgültige Freigabe stehen aus.
+
+Contabo ist als Hostinganbieter vom Nutzer erlaubt. Noch kein Serverzugang oder Zielhost verbunden; keine Bestellung oder Veröffentlichung. [Contabo-Vorbereitung und benötigte Angaben](docs/CONTABO.md).
