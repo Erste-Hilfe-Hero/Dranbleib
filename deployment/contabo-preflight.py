@@ -26,6 +26,9 @@ def probe_port(port):
 _, node_version = command(['node', '--version'])
 _, service_status = command(['systemctl', 'is-active', 'dranbleib'])
 _, disk = command(['df', '-Pk', '/opt'])
+_, containers = command(['docker','ps','--format','{{.Names}}\t{{.Image}}\t{{.Ports}}'])
+_, certificate = command(['openssl','x509','-in','/etc/letsencrypt/live/nyrathen-contabo-eu/fullchain.pem','-noout','-dates','-ext','subjectAltName'])
+_, firewall = command(['ufw','status'])
 domains=set()
 for folder in ['/etc/nginx/sites-enabled','/etc/nginx/conf.d']:
     p=Path(folder)
@@ -42,6 +45,9 @@ report = {
     'configured_nginx_hostnames':sorted(domains),
     'ports_in_use':{str(p):probe_port(p) for p in [80,443,8443,8790,8791]},
     'proxy_binaries':{p:bool(shutil.which(p)) for p in ['caddy','nginx','docker','certbot']},
+    'public_certificate_metadata':certificate,
+    'containers_public_metadata':containers,
+    'firewall_status':firewall,
     'certificate_names':sorted(p.name for p in Path('/etc/letsencrypt/live').glob('*') if p.is_dir()),
     'mode': 'read-only-preflight',
     'platform': platform.system(),
