@@ -2,7 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
 import { request } from 'node:http';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, symlinkSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { startServer } from '../src/server.js';
@@ -56,4 +58,19 @@ test('Echte MCP-Verbindungen: Tools, Resource, Hauptablauf und getrennte Sitzung
   await transports[0].terminateSession();
   assert.equal(app.mcpStore.db.prepare('SELECT COUNT(*) AS n FROM loops').get().n,0);
  }finally{for(const t of transports){try{await t.terminateSession();}catch{}}for(const c of clients)await c.close();await app.close();}
+});
+
+// Release activation uses /opt/dranbleib/current, a symlink. Exercise that real entrypoint.
+test('Server startet über versionierten Symlink und beendet sich sauber',async()=>{
+ const dir=mkdtempSync(join(tmpdir(),'dranbleib-entry-'));
+ const link=join(dir,'server.js');symlinkSync(fileURLToPath(new URL('../src/server.js',import.meta.url)),link);
+ const child=spawn(process.execPath,[link],{env:{...process.env,PORT:'0',DATA_PATH:join(dir,'entry.sqlite')},stdio:['ignore','pipe','pipe']});
+ try{
+  const base=await new Promise((resolve,reject)=>{
+   let output='';const timer=setTimeout(()=>reject(new Error('Symlink-Server startete nicht.')),10000);
+   child.stdout.on('data',chunk=>{output+=chunk;const match=output.match(/http:\/\/127\.0\.0\.1:(\d+)/);if(match){clearTimeout(timer);resolve(match[0]);}});
+   child.once('exit',code=>{clearTimeout(timer);reject(new Error('Symlink-Server beendete sich vor dem Start: '+code));});
+  });
+  assert.deepEqual(await (await fetch(base+'/health')).json(),{status:'ok',mode:'local-demo'});
+ }finally{if(child.exitCode===null && child.signalCode===null){const exited=once(child,'exit');child.kill('SIGTERM');await exited;}rmSync(dir,{recursive:true,force:true});}
 });

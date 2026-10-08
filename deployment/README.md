@@ -1,30 +1,39 @@
-# Privater Betrieb auf einem vorhandenen Contabo-VPS
+# Separater Dranbleib-Dienst auf dem vorhandenen Contabo-VPS
 
-Diese Dateien wurden lokal vorbereitet, **nicht auf Contabo installiert**. Der Dienst ist eine private Entwicklungsdemo, unabhängig vom Wert NODE_ENV. Er bleibt an 127.0.0.1 gebunden. Kein öffentliches Hosting, keine OAuth-Anmeldung, keine Kontoüberwachung.
+Dranbleib verwendet den bereits vorhandenen Contabo-Zugang aus dem privaten LifeKit-Repository. Es wird kein neuer VPS bestellt. GitHub-Actions nutzt denselben GitHub-hosted Ubuntu-Runner wie die verifizierte LifeKit-Veröffentlichung. Die Nutzerfreigabe erlaubt den eigenen Dranbleib-Workflow; LifeKit-Spielcode und bestehende Spiel-Deployments bleiben unverändert.
 
-## Voraussetzungen und Bestandsaufnahme
+## Aufbau
 
-Linux-VPS mit systemd, Node.js 24 oder neuer unter /usr/bin/node, npm, separater Dienstbenutzer dranbleib und Projektverzeichnis /opt/dranbleib. Diese konkreten Pfade vor Installation prüfen. Zuerst bestehende Dienste und Belegung von Port 8787 prüfen; keine fremden Anwendungen überschreiben. Die Vorlage ist für einen dedizierten Benutzer gedacht, nicht root. Bestellung, Systeminstallation, Benutzeranlage und Deployment wurden hier nicht ausgeführt.
+- Zugriffshilfe aus LifeKit auf geprüftem Commit 5a1f0cdd60e06b4f41ad5545030bcaaa0ed8c147; nur innerhalb des Runners ausgeführt. Vier vorhandene CONTABO-Secrets, keine Werte in Dranbleib-Quellcode, ZIP oder Logs.
+- Eigener unprivilegierter Dienstbenutzer `dranbleib`, Service `dranbleib`, SQLite unter `/var/lib/dranbleib` mit privaten Dateirechten.
+- Versionierte Releases `/opt/dranbleib/releases/<commit>`, atomarer Verweis `/opt/dranbleib/current`.
+- Private Node.js-24-Laufzeit im Release. Die Systemlaufzeit und Spielecontainer werden nicht verändert.
+- Listener ausschließlich `127.0.0.1:8790`; kein öffentlicher Reverse Proxy und keine Firewalländerung.
 
-## Installation nach verbundenem und autorisiertem Zugang
+## Runner-Aufträge
 
-1. Auf dem tatsächlichen Zielserver OS, Node-/npm-Version, freie Ressourcen und `ss -ltn` prüfen. Falls Node nicht an /usr/bin/node liegt, ExecStart in der Servicevorlage an den verifizierten Pfad anpassen.
-2. Quellcode aus dem geprüften ZIP in ein neues Projektverzeichnis übertragen. Keine lokalen Datenbanken, Cookies oder .env-Dateien kopieren. Projektcode gehört einem administrativen Deployment-Benutzer und muss für den Dienst lesbar sein; der Dienst benötigt keinen Schreibzugriff auf den Code.
-3. Im Projektverzeichnis `npm ci --omit=dev` ausführen. Keine API-Schlüssel erforderlich. Für Tests vorher vollständig `npm ci`, `npm run check` und `npm test` ausführen.
-4. Den separaten Dienstbenutzer bereitstellen, Vorlage prüfen und als /etc/systemd/system/dranbleib.service installieren. Erst danach `systemctl daemon-reload` und `systemctl enable --now dranbleib` ausführen. StateDirectory wird von systemd privat unter /var/lib/dranbleib angelegt.
-5. Auf dem VPS `curl --fail http://127.0.0.1:8787/health` prüfen: status ok, mode local-demo. `systemctl status dranbleib` prüfen; keine Quelleninhalte loggen.
-6. Vom eigenen Rechner per SSH-Portweiterleitung auf den ausdrücklich zugewiesenen VPS zugreifen: `ssh -N -L 8787:127.0.0.1:8787 SSH_BENUTZER@VPS_HOST`. SSH_BENUTZER/VPS_HOST sind Platzhalter, keine bekannten Zugangsdaten. Dann http://127.0.0.1:8787 öffnen. Falls Port 8787 lokal belegt ist, einen freien lokalen Port verwenden.
+Die Dateien `lifekit-preflight.workflow.yml` und `lifekit-deploy.workflow.yml` sind die nachvollziehbaren Quellen für die getrennten Workflows im privaten LifeKit-Repository. Die dort tatsächlich installierten Versionen ersetzen Platzhalter durch exakt überprüfte Dranbleib-Commits; keine frei wählbaren Remote-Befehle oder Quelleninputs.
 
-Der systemd-Dienst ist auf Start/Stop/Neustart ausgelegt. Zum Stoppen `systemctl stop dranbleib`; dies löscht die Datenbank nicht. Backups, Exportdateien und Löschung müssen bewusst verwaltet werden. Die Browseridentität bleibt cookiegebunden; vor Cookieverlust exportieren.
+1. **Preflight** führt `contabo-preflight.py` über SSH-stdin aus: OS, Architektur, glibc, Node, systemd, separater Port, freie Kapazität und Projektpfade. Keine Installation oder Änderungen an Anwendungsdaten. Erfolgreicher Lauf: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37732812264
+2. **Deploy** führt die neun Produkt-/MCP-Tests und sechs Archive-Sicherheitstests vor Zugriff auf den Server aus. Anschließend `npm ci --omit=dev`, explizites Paket nur aus src/public/node_modules/runtime/package-Dateien. Keine Datenbank, .git oder .env.
+3. `install-private.py` prüft SHA256, festen Commit, Plattform, freigegebenen Pfad und Archiveinträge. Fremde Services und unverwaltete Verzeichnisse werden nicht überschrieben. Eigener Dienststart mit Health-Check; bei Fehlern wird der vorherige Dranbleib-Dienst wiederhergestellt oder die neue Einheit deaktiviert. Keine Spieldienste werden gestartet/gestoppt.
+4. `smoke-private.py` prüft synthetische Erfassung/Prüfung/Speicherung, Rollen-/Fristunklarheit, Liste/Filter, Entwurf, Statuswechsel/Abschluss, Fremdzugriffssperre und Löschung gegen den tatsächlich installierten Dienst. Synthetischer Datensatz wird anschließend gelöscht.
+5. Nur Installations-/Testbelege werden als Artefakte gespeichert. Temporärer SSH-Schlüssel wird aus dem Runner entfernt. Kein geheimer Schlüssel wird in das öffentliche Repository übernommen.
+
+Der SSH-Trust-Bootstrap übernimmt die bestehende Methode von LifeKit (ssh-keyscan). Dies ist keine unabhängige Prüfung des Hostschlüssels. Für öffentliche Produktionsfreigabe den Fingerprint zusätzlich über einen vertrauenswürdigen Kanal verifizieren. Diese private Entwicklungsinstallation ist keine produktive Mehrnutzerplattform.
+
+## Bedienen
+
+Mit einem eigenen, bereits autorisierten SSH-Zugang zum vorhandenen VPS:
+
+```bash
+ssh -N -L 8787:127.0.0.1:8790 root@161.97.102.171
+```
+
+Danach im eigenen Browser http://127.0.0.1:8787 öffnen. Private MCP-Adresse auf dem VPS: http://127.0.0.1:8790/mcp. Die Verbindung setzt den tatsächlichen SSH-Zugang voraus; ein Schlüssel wird nicht öffentlich bereitgestellt. Alternativ die Demo lokal mit `npm ci` / `npm start` verwenden.
+
+Auf dem Server: `systemctl status dranbleib`, `curl --fail http://127.0.0.1:8790/health`. Stoppen: `systemctl stop dranbleib`; dies löscht keine Daten. Release und Node stammen aus dem installierten Commit. Eine Wiederholung desselben Releases wird bewusst abgewiesen, bis der vorhandene Stand geprüft wurde. Sicherungen/Exporte bewusst verwalten; keine automatische Datenlöschung.
 
 ## Öffentliche ChatGPT-App
 
-Diese Vorlage allein stellt keine öffentliche ChatGPT-App bereit. Vor einem öffentlichen Reverse Proxy sind OAuth/Discovery/Tokenprüfung, stabile Nutzerpersistenz, Domain/TLS und reale Plattformtests nötig. Host-/Originprüfung nicht einfach entfernen. Öffentliches Hosting und Einreichung bleiben blockiert; siehe ../submission/CHECKLIST.md und ../docs/CONTABO.md.
-
-## Bestehender LifeKit-Runner
-
-`lifekit-preflight.workflow.yml` ist eine **nur lokal gespeicherte Vorlage** für einen getrennten manuellen Actions-Auftrag im LifeKit-Repository. Sie verwendet dessen bestehende CONTABO-Secrets und denselben GitHub-hosted Ubuntu-Runner wie der verifizierte erfolgreiche Lauf. Die Zugriffshilfe bleibt im privaten LifeKit-Repository; keine Secretwerte oder SSH-Schlüssel werden in das öffentliche Dranbleib-Repository kopiert.
-
-Die erste Stufe führt `contabo-preflight.py` über SSH-stdin aus: Linux-/Architektur-/Node-/systemd-Prüfung, freier separater Port 8790 und Dranbleib-Pfade. Keine Installation, kein Neustart, kein Zugriff auf Anwendungsdaten. Vor tatsächlicher Nutzung muss die Quelle auf den dann überprüften Dranbleib-Commit gepinnt werden. Der bisherige SSH-Trust-Bootstrap des vorhandenen Workflows verwendet ssh-keyscan; dies ist keine unabhängige Hostschlüsselverifikation. Für einen produktiven Deploymentauftrag vorher den Hostschlüssel über einen vertrauenswürdigen Kanal prüfen.
-
-Der Nutzer hatte GitHub-Speicherungen gestoppt. Deshalb wurde diese Vorlage nicht auf GitHub gespeichert oder ausgeführt. Eine erneute konkrete Freigabe für Workflow-Speicherung und Deployment wurde angefragt. Erst nach positiver Antwort kann diese Stufe auf dem tatsächlichen Host ausgeführt und ein passender isolierter Installationsauftrag erstellt werden. Die vorhandenen Spieleworkflows werden nicht ausgelöst.
+Nicht implementiert/veröffentlicht: öffentliche HTTPS-MCP-Adresse mit produktiver OAuth-Identität und stabiler nutzerbezogener Persistenz. Konto-/Workspacezugang für echte ChatGPT-Tests und Entwicklerverifizierung fehlt weiterhin. Der private Dienst ist die startbare, überprüfbare MVP-Demo. Nur diese Stufe ist als fertig zu bewerten; keine Einreichung oder Produktionssicherheit behaupten.

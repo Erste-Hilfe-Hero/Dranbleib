@@ -6,10 +6,10 @@ After=network.target
 Type=simple
 User=dranbleib
 Group=dranbleib
-WorkingDirectory=/opt/dranbleib
-ExecStart=/usr/bin/node /opt/dranbleib/src/server.js
+WorkingDirectory=/opt/dranbleib/current
+ExecStart=/opt/dranbleib/current/runtime/node /opt/dranbleib/current/src/server.js
 Environment=NODE_ENV=production
-Environment=PORT=8787
+Environment=PORT=8790
 Environment=DATA_PATH=/var/lib/dranbleib/dranbleib.sqlite
 StateDirectory=dranbleib
 StateDirectoryMode=0700
