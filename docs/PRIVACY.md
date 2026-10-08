@@ -33,3 +33,7 @@ Einzelne Vorgänge werden über den benannten Löschdialog einschließlich Beleg
 ## Vor Produktion offen
 
 OAuth mit stabiler Nutzer-ID und verifizierten Tokens, echte Account-/Scope-Tests, TLS/Hosting, sichere Sitzungsrotation, Rate Limits, Betriebsüberwachung ohne Inhalte, Verschlüsselung/Backup-/Aufbewahrungskonzept, Nutzerlöschung/Account-Export, juristische Texte und Sicherheitsprüfung. Kein produktiver Mehrnutzerbetrieb freigegeben.
+
+## Authentifizierter Kandidat
+
+Der getrennte Modus speichert zusätzlich Benutzername, interne Konto-ID, Scrypt-Passworthash mit Salt, OAuth-Clientmetadaten sowie kurzlebige Code-/Tokenhashes. Ganze Quellen und Klartextpasswörter/-tokens werden nicht gespeichert. Konten überleben einen Neustart; Export und passwort-/CSRF-geschützte Kontolöschung sind implementiert. Nutzer sehen die dauerhafte Speicherung vor Zustimmung. Keine externe Identitätsplattform, E-Mail-Verifikation oder Wiederherstellung. Produktionsfreigabe und tatsächliche Anbieterangaben fehlen. Details: [RELEASE.md](RELEASE.md).

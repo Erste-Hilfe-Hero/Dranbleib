@@ -36,4 +36,10 @@ Auf dem Server: `systemctl status dranbleib`, `curl --fail http://127.0.0.1:8790
 
 ## Öffentliche ChatGPT-App
 
-Nicht implementiert/veröffentlicht: öffentliche HTTPS-MCP-Adresse mit produktiver OAuth-Identität und stabiler nutzerbezogener Persistenz. Konto-/Workspacezugang für echte ChatGPT-Tests und Entwicklerverifizierung fehlt weiterhin. Der private Dienst ist die startbare, überprüfbare MVP-Demo. Nur diese Stufe ist als fertig zu bewerten; keine Einreichung oder Produktionssicherheit behaupten.
+Öffentliche HTTPS-Adresse, produktive Freigabe und OpenAI-Einreichung stehen aus. Ein selbst gehosteter OAuth-Kandidat ist implementiert und getrennt installiert; dies ersetzt keine Produktionsprüfung.
+
+## Authentifizierter Kandidat
+
+`lifekit-release.workflow.yml` ist der eigenständige Runner-Auftrag. Er qualifiziert Node-/Archiv-/Browser-/OAuth-Tests und Audit vor Zugriff auf Contabo und installiert mit `--mode authenticated --public-origin https://dranbleib.localhost`. Diese lokale Origin ist keine öffentliche Domain. Eigener Dienst/Benutzer `dranbleib-release`, `/opt/dranbleib-release`, Daten `/var/lib/dranbleib-release`, Loopback 8791. Bestehende Demo auf 8790 und alle vorherigen Dienste bleiben aktiv.
+
+Der Runner öffnet nur eine temporäre SSH-Weiterleitung zu 8791; `smoke-release.mjs` prüft gegen den tatsächlich installierten Dienst DCR, PKCE, explizite Zustimmung, zwei Konten, Datentrennung, Beleg/Unklarheit und CRUD. Synthetische Konten werden danach gelöscht, keine Token/Passwörter ausgegeben. Für öffentliche Freigabe später eine kontrollierte HTTPS-Origin konfigurieren und TLS-Proxy separat prüfen; siehe [Release](../docs/RELEASE.md).

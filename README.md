@@ -53,13 +53,13 @@ npm audit --omit=dev
 npm run package:review
 ```
 
-Optional `CHROMIUM_PATH=/pfad/zu/chromium npm run test:ui`. Stand 2026-10-08: zehn Domain-/HTTP-/MCP-Tests bestanden, Browserablauf und simulierte MCP-Apps-Host-Bridge mit echten Tools/Resource bestanden. Die Tests verwenden temporäre Datenbanken und zwei getrennte Nutzer-/MCP-Sitzungen. Screenshots in `artifacts/`. Vollständiges Protokoll und fehlende ChatGPT-Prüfung: [VALIDATION.md](docs/VALIDATION.md).
+Optional `CHROMIUM_PATH=/pfad/zu/chromium npm run test:ui`. Stand 2026-10-08: 15 Domain-/HTTP-/MCP-/OAuth-Tests bestanden, Browserablauf und simulierte MCP-Apps-Host-Bridge mit echten Tools/Resource bestanden. Die Tests verwenden temporäre Datenbanken und zwei getrennte Nutzer-/MCP-Sitzungen. Screenshots in `artifacts/`. Vollständiges Protokoll und fehlende ChatGPT-Prüfung: [VALIDATION.md](docs/VALIDATION.md).
 
 ## ChatGPT verbinden und einreichen
 
 Offizielle Apps-SDK-URLs führen am Prüfdatum zur **neuen Plugins-Dokumentation**. Gemeint ist MCP + MCP Apps, nicht das alte `ai-plugin.json`-/OpenAPI-Plugins-Format. Verwendete Versionen: `@modelcontextprotocol/sdk 1.32.1`, `@modelcontextprotocol/ext-apps 2.0.3`, `zod 4.6.5`; UI ohne zusätzliches Framework. Prüfung der offiziellen Dokumentation und npm-Versionen am **2026-10-07, ca. 15:56–16:11 UTC**. [Quellenstand](docs/PLATFORM.md), [Architektur](docs/ARCHITECTURE.md).
 
-Ein echter ChatGPT-/Entwicklermodus-Test wurde **nicht durchgeführt**: kein verbundenes ChatGPT-Testkonto, keine Tunnelidentität, kein HTTPS-Endpunkt. Die offizielle aktuelle Oberfläche beschreibt „ChatGPT Plugins → Add custom MCP server“. Ein Secure MCP Tunnel ist für private Entwicklung möglich, benötigt jedoch `tunnel_id`, Laufzeit-API-Key und Workspace-/Tunnel-Berechtigungen. Keine Schlüssel hier einfügen. Produktive Nutzung braucht zuerst OAuth und stabile Nutzeridentitäten. Öffentliche Einreichung benötigt zusätzlich einen stabilen öffentlichen HTTPS-Endpunkt; ein privater Tunnel genügt nicht. [Einreichungscheckliste](submission/CHECKLIST.md).
+Ein echter ChatGPT-/Entwicklermodus-Test wurde **nicht durchgeführt**: kein verbundenes ChatGPT-Testkonto, keine Tunnelidentität, kein HTTPS-Endpunkt. Die offizielle aktuelle Oberfläche beschreibt „ChatGPT Plugins → Add custom MCP server“. Ein Secure MCP Tunnel ist für private Entwicklung möglich, benötigt jedoch `tunnel_id`, Laufzeit-API-Key und Workspace-/Tunnel-Berechtigungen. Keine Schlüssel hier einfügen. Der getrennte Release-Kandidat implementiert OAuth und stabile Nutzeridentitäten; öffentliche HTTPS-Einrichtung und echte Hosttests stehen noch aus. Öffentliche Einreichung benötigt zusätzlich einen stabilen öffentlichen HTTPS-Endpunkt; ein privater Tunnel genügt nicht. [Einreichungscheckliste](submission/CHECKLIST.md).
 
 `npm run package:review` erstellt `artifacts/dranbleib-review-preparation.zip`: Quellcode, Lockfile, Dokumentation, Entwurfsmetadaten, Prüfszenarien und verfügbare Demo-Screenshots; keine Datenbank, Cookies, Schlüssel, node_modules oder .git. Das ist ein **Vorbereitungspaket**, kein hochladbarer oder bereits genehmigter Produktionsplugin. Fehlende Anbieterangaben und URLs sind offen dokumentiert.
 
@@ -71,4 +71,8 @@ Quellcode und Dokumentation liegen auf https://github.com/Erste-Hilfe-Hero/Dranb
 
 Mit eigenem autorisiertem SSH-Zugang `ssh -N -L 8787:127.0.0.1:8790 root@161.97.102.171` starten, dann http://127.0.0.1:8787 öffnen. Die lokale Startanleitung oben funktioniert weiterhin unabhängig davon. [Contabo-Betrieb und Nachweise](docs/CONTABO.md), [Runner/Installation](deployment/README.md).
 
-Nicht öffentlich als ChatGPT-App veröffentlicht oder eingereicht. Für diese weitere Stufe fehlen produktive OAuth-Konfiguration und stabile Kontenpersistenz, eigene HTTPS-Adresse, ChatGPT-/verifiziertes Entwicklerkonto sowie echte Anbieter-, Datenschutz-, Nutzungsbedingungen- und Supportangaben. Private Demositzungen sind keine produktive Anmeldung. Keine Geheimnisse im Repository oder Vorbereitungspaket.
+Nicht öffentlich als ChatGPT-App veröffentlicht oder eingereicht. Für diese weitere Stufe fehlen die eigene HTTPS-Adresse, ChatGPT-/verifiziertes Entwicklerkonto sowie echte Anbieter-, Datenschutz-, Nutzungsbedingungen- und Supportangaben. Ein selbst gehosteter OAuth-Kandidat mit stabiler Kontenpersistenz ist implementiert; siehe [Release-Kandidat](docs/RELEASE.md). Private Demositzungen sind keine produktive Anmeldung. Keine Geheimnisse im Repository oder Vorbereitungspaket.
+
+## Authentifizierter Release-Kandidat
+
+`PUBLIC_ORIGIN=https://dranbleib.localhost PORT=8791 npm run start:release` startet den getrennten Kandidaten mit Anmeldung und dauerhafter Kontenpersistenz. Die Beispiel-Origin dient nur der Entwicklung; TLS und eine kontrollierte öffentliche Adresse fehlen weiterhin. Discovery, DCR, S256-PKCE, Tokenrotation, Rechteprüfung, Export und bestätigte Kontolöschung sind implementiert und getestet. `npm run test:oauth-ui` prüft zusätzlich die Anmeldeformulare; dabei wird HTTPS lokal simuliert. [Start, Betrieb und Freigabegrenzen](docs/RELEASE.md).

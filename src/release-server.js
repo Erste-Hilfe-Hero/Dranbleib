@@ -27,7 +27,7 @@ export function startReleaseServer({publicOrigin=process.env.PUBLIC_ORIGIN,port=
   const backendOrigin='http://127.0.0.1:'+http?.address()?.port;
   if(![origin.host,new URL(backendOrigin).host].includes(req.headers.host))return res.status(403).json({error:'Unzulässiger Host.'});
   if(req.headers.origin&&! [origin.origin,backendOrigin].includes(req.headers.origin))return res.status(403).json({error:'Unzulässiger Ursprung.'});
-  res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('Content-Security-Policy',"default-src 'none'; style-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");next();
+  res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');res.setHeader('Content-Security-Policy',"default-src 'none'; style-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");next();
  });
  const authOptions={provider,issuerUrl:origin,resourceServerUrl:new URL(provider.resource),scopesSupported:SCOPES,resourceName:'Dranbleib'};
  const authMetadata={...createOAuthMetadata(authOptions),token_endpoint_auth_methods_supported:['none'],revocation_endpoint_auth_methods_supported:['none']};

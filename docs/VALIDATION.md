@@ -56,3 +56,9 @@ GitHub-Push und neue separate LifeKit-Runneraufträge vom Nutzer freigegeben. Re
 **Lauf 37733456055 erfolgreich:** installierter Commit b144fe3ed348d14ea19c1becf0f3965794c20bf2; Service dranbleib, private Adresse 127.0.0.1:8790, Health ok/local-demo. Echte synthetische CRUD-/Entwurfs-/Cookieisolationsprüfung am VPS bestanden, Testdatensatz gelöscht, zuvor laufende Dienste weiterhin aktiv. Keine öffentliche Proxy-/Firewallfreigabe. Kontobasierte OAuth-Trennung und echter ChatGPT-Kontotest bleiben ausdrücklich ungeprüft.
 
 Ein lokaler CLI-Artefaktdownload wurde vom Netzwerkziel abgelehnt; Runnerstatus und inhaltliche Belege wurden über die verbundenen GitHub-Joblog-Tools verifiziert. Keine temporären Download-URLs oder Secretwerte in dieser Dokumentation. Vorbereitungspaket erneut erstellt und auf Laufzeitdaten/Caches geprüft.
+
+## Kandidatenprüfung 2026-10-08
+
+15 Node-Tests bestanden, sechs Archive-Sicherheitstests bestanden, Browser-/MCP-Hostsimulation bestanden. Zusätzlicher OAuth-Browsertest bestanden: Secure-Cookie, sichtbare Zustimmung, Registrierung, State-Rückkehr und bestätigte Kontolöschung, mobil ohne Überlauf. HTTPS und Callback wurden in diesem Test lokal geroutet; kein öffentliches Zertifikat oder tatsächlicher ChatGPT-Login geprüft. Der Test fand einen Formular-Originfehler durch `Referrer-Policy: no-referrer`; Kandidat verwendet `same-origin`, schützt dadurch externe Referrer und erhält den Ursprung beim eigenen Formular-POST. Audit: 0 bekannte Schwachstellen.
+
+Erste authentifizierte Contabo-Installation: Runner 37736768157, Commit 8b023e8, Dienst `dranbleib-release`, 127.0.0.1:8791. Remote OAuth-/CRUD-/Kontentrennung bestanden, synthetische Konten gelöscht, vorherige Dienste erhalten. Diese erste Installation wird durch den nachfolgend dokumentierten korrigierten Kandidaten ersetzt.

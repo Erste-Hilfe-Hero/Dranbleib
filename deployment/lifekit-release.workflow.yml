@@ -35,6 +35,9 @@ jobs:
           npm ci
           npm run check
           npm test
+          CHROMIUM_PATH=/usr/bin/google-chrome npm run test:ui
+          CHROMIUM_PATH=/usr/bin/google-chrome npm run test:oauth-ui
+          npm audit --omit=dev --audit-level=moderate
           python -m unittest discover -s test -p '*_test.py'
       - name: Build an explicit production-only release with private Node runtime
         working-directory: project

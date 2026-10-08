@@ -26,4 +26,8 @@ Weiteres zu Releases, Rollback und Bedienung: [deployment/README.md](../deployme
 
 ## Verbleibende externe Schritte
 
-Die private MVP-Demo ist umgesetzt. Eine öffentlich erreichbare ChatGPT-App ist noch nicht veröffentlicht: produktive OAuth-Identität/stabile Nutzerdatenhaltung, eigene HTTPS-Domain, verifiziertes OpenAI-Entwicklerkonto, echte ChatGPT-Kontotests und juristische Anbieter-/Datenschutz-/Supportangaben sind nicht verfügbar. Kein Portal-Upload, keine Einreichung, keine Veröffentlichung. Der gegenwärtige Dienst darf nicht als produktive Mehrnutzerplattform dargestellt werden.
+Die private MVP-Demo ist umgesetzt. Eine öffentlich erreichbare ChatGPT-App ist noch nicht veröffentlicht: eigene HTTPS-Domain, verifiziertes OpenAI-Entwicklerkonto, echte ChatGPT-Kontotests und juristische Anbieter-/Datenschutz-/Supportangaben sind nicht verfügbar. Kein Portal-Upload, keine Einreichung, keine Veröffentlichung. Der gegenwärtige Dienst darf nicht als produktive Mehrnutzerplattform dargestellt werden.
+
+## Getrennter OAuth-Kandidat
+
+Dienst `dranbleib-release` mit eigener SQLite/Benutzer und Loopback 8791 installiert. Erste erfolgreiche Kandidatenprüfung: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37736768157. Origin `https://dranbleib.localhost` ist nur lokale Konfiguration, kein öffentlich funktionierender Endpunkt. Anmeldung, PKCE, Zustimmung und zwei getrennte Konten wurden durch den Runner am tatsächlichen Dienst geprüft. Öffentliche TLS-Adresse und echtes ChatGPT-Konto fehlen weiterhin. [Release-Details](RELEASE.md).

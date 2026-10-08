@@ -16,7 +16,7 @@ Stand: 2026-10-08. Private Contabo-Demo erfolgreich installiert und geprüft; no
 - [ ] Autorisiertes ChatGPT-Konto/Workspace mit Berechtigung für benutzerdefinierte MCP-Server.
 - [ ] ChatGPT-Testverbindung zum bereits installierten privaten Dienst: Secure MCP Tunnel (`tunnel_id`, Runtime-API-Key, Tunnels Read/Use, bei Einrichtung Read/Manage, zugeordneter Workspace), oder ausdrücklich freigegebener HTTPS-Testendpunkt.
 - [ ] Keine Demo mit persönlichen Produktivdaten öffentlich zugänglich machen. Host-Prüfung bleibt absichtlich auf Loopback beschränkt; ein Forwarder müsste Host/Origin korrekt erhalten. Keine allgemeine Freigabe durch Weglassen dieser Prüfung.
-- [ ] Den Umgang des Hosts mit stateful MCP-Demositzungen prüfen: Verlust bei Neuverbindung ist erwartet. Für echte Nutzerpersistenz zuerst OAuth umsetzen.
+- [ ] Den Umgang des Hosts mit stateful MCP-Demositzungen prüfen: Verlust bei Neuverbindung ist erwartet. Für den Release-Kandidaten stabile OAuth-Kontenpersistenz testen; anonyme Demo bleibt getrennt.
 - [ ] Verbindung: ChatGPT Plugins → + → Add custom MCP server → HTTPS-URL einschließlich /mcp oder vorhandenen Tunnel auswählen → tatsächliche Authentifizierung konfigurieren → Risikohinweis selbst prüfen → installieren → neuen Chat mit @Dranbleib starten. Gegebenenfalls nennt ein Konto diese Funktion noch Entwicklermodus; Konto-/Workspace-Richtlinien gelten.
 - [ ] Alle 5 positiven / 3 negativen Szenarien im Konto ausführen; Toolwahl, Argumente, Bestätigungen, Resultate und UI dokumentieren. Nach Metadatenänderungen Refresh und neuer Chat.
 
@@ -40,4 +40,6 @@ Stand: 2026-10-08. Private Contabo-Demo erfolgreich installiert und geprüft; no
 
 Öffentliches Repository https://github.com/Erste-Hilfe-Hero/Dranbleib vorhanden, Source-Pushes verifiziert. Zusätzliche separate Workflows im privaten LifeKit-Repository vom Nutzer freigegeben. Erfolgreiche private Contabo-Installation und reale Servertests: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37733456055. Kein GitHub-/Contabo-Zugang mehr als pauschaler Blocker zu behandeln.
 
-Offen sind öffentliche HTTPS/OAuth-Produktionsarchitektur, echter ChatGPT-Test, verifiziertes Entwicklerkonto, reale rechtliche Angaben und Einreichung. Der private Dienst ersetzt diese Prüfungen nicht. Keine vorhandenen Spiel-Deployments verändert.
+Selbst gehosteter OAuth-Kandidat implementiert und automatisiert geprüft. Offen sind öffentliche HTTPS-Einrichtung und Produktionsfreigabe, echter ChatGPT-Test, verifiziertes Entwicklerkonto, reale rechtliche Angaben und Einreichung. Der private Dienst ersetzt diese Prüfungen nicht. Keine vorhandenen Spiel-Deployments verändert.
+
+Kandidatenprüfung: Discovery, S256-PKCE, Resource-/Redirect-/CSRF-Bindung, Scopes, Kontentrennung nach Neustart, Refresh-Replay und Kontolöschung bestanden. Das ersetzt die Prüfung im tatsächlichen ChatGPT-Konto oder die OpenAI-Einreichung nicht.
