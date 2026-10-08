@@ -22,7 +22,13 @@ def main():
  if UNIT.exists():
   if not args.verify_existing or 'Description=Dranbleib separate HTTPS preview' not in UNIT.read_text() or not (BASE/'dranbleib-managed').is_file():raise RuntimeError('TLS service already exists; inspect before reinstalling.')
   before=running();run('systemctl','restart','dranbleib-https.service')
-  with urllib.request.urlopen(ORIGIN+'/health',timeout=5) as r:health=json.load(r)
+  health={}
+  for _ in range(15):
+   try:
+    with urllib.request.urlopen(ORIGIN+'/health',timeout=3) as r:health=json.load(r)
+    if health.get('status')=='ok':break
+   except (OSError,ValueError):pass
+   time.sleep(1)
   if health.get('status')!='ok' or before-running():raise RuntimeError('Existing TLS preview verification failed.')
   print(json.dumps({'status':'https-preview-existing-verified','origin':ORIGIN,'existing_services_preserved':True,'production_published':False}));return
  for name in ['dranbleib-certificate-sync.service','dranbleib-certificate-sync.timer']:
