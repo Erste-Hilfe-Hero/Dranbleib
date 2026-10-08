@@ -37,3 +37,5 @@ OAuth mit stabiler Nutzer-ID und verifizierten Tokens, echte Account-/Scope-Test
 ## Authentifizierter Kandidat
 
 Der getrennte Modus speichert zusätzlich Benutzername, interne Konto-ID, Scrypt-Passworthash mit Salt, OAuth-Clientmetadaten sowie kurzlebige Code-/Tokenhashes. Ganze Quellen und Klartextpasswörter/-tokens werden nicht gespeichert. Konten überleben einen Neustart; Export und passwort-/CSRF-geschützte Kontolöschung sind implementiert. Nutzer sehen die dauerhafte Speicherung vor Zustimmung. Keine externe Identitätsplattform, E-Mail-Verifikation oder Wiederherstellung. Produktionsfreigabe und tatsächliche Anbieterangaben fehlen. Details: [RELEASE.md](RELEASE.md).
+
+Bei der geschlossenen HTTPS-Testversion werden zufällige Betreiber-/Reviewer-Testzugänge zusätzlich in einer root-only 0600-Datei außerhalb des Projekts abgelegt. Diese Klartext-Testzugangsdatei ist für die private Reviewer-Einrichtung nötig, niemals öffentlich, in Logs oder im ZIP; sie wird nicht mit normaler Kontopasswortspeicherung verwechselt. Synthetische Smoke-Zugangsdateien werden nach Tests entfernt.
