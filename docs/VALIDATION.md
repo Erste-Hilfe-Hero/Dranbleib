@@ -66,3 +66,7 @@ Erste authentifizierte Contabo-Installation: Runner 37736768157, Commit 8b023e8,
 ## Abschließender Kandidatennachweis
 
 Korrigierte Version `55104624ce00511414aec6e93afa69c0e9e57cfe` am 2026-10-08 über den vorhandenen Runner installiert: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37737261844. 15 Node-Tests, sechs Archivtests, beide Browserprüfungen und Audit bestanden. Realer OAuth-/CRUD-/Kontentrennungstest am installierten Dienst bestanden; synthetische Konten danach gelöscht. Service `dranbleib-release`, Listener `127.0.0.1:8791`; vorherige Dienste aktiv. Keine öffentliche HTTPS-Verbindung oder ChatGPT-Verzeichnisveröffentlichung.
+
+## 0.2.0-rc.2
+
+19 Node-Tests, sechs Archivtests, beide Browserprüfungen bestanden. Neu: realer TLS-Proxy mit verifizierter Test-CA, Host-/Origin-Schutz, geschlossene Registrierung/Operator-Testkonten und Schemaprüfung/Anbietersperre. Icons/Logos gerendert und visuell geprüft. Tatsächlicher lokaler Browserablauf als 390×844-MP4 aufgenommen (11,48 Sekunden); kein ChatGPT-Kontotest. Öffentlicher HTTPS-/OAuth-/CRUD-Test im Runner 37811955735 bestanden, bestehende Services aktiv. Reviewer-Testkonto privat eingerichtet, synthetische Smoke-Konten und Passwortdateien entfernt.

@@ -43,3 +43,13 @@ Stand: 2026-10-08. Private Contabo-Demo erfolgreich installiert und geprüft; no
 Selbst gehosteter OAuth-Kandidat implementiert und automatisiert geprüft. Offen sind öffentliche HTTPS-Einrichtung und Produktionsfreigabe, echter ChatGPT-Test, verifiziertes Entwicklerkonto, reale rechtliche Angaben und Einreichung. Der private Dienst ersetzt diese Prüfungen nicht. Keine vorhandenen Spiel-Deployments verändert.
 
 Kandidatenprüfung: Discovery, S256-PKCE, Resource-/Redirect-/CSRF-Bindung, Scopes, Kontentrennung nach Neustart, Refresh-Replay und Kontolöschung bestanden. Das ersetzt die Prüfung im tatsächlichen ChatGPT-Konto oder die OpenAI-Einreichung nicht.
+
+## Ergänzung 0.2.0-rc.2 – 8. Oktober 2026
+
+- [x] Öffentlicher HTTPS-Testendpunkt https://161.97.102.171:8443/mcp, extern TLS/OAuth/CRUD geprüft, geschlossene Registrierung.
+- [x] Reviewer-Testkonto mit synthetischen Beispielen, Zugangsdaten nur privat auf dem VPS.
+- [x] Vier Icons/Logos, Screenshot und Video des tatsächlichen lokalen Browserablaufs; kein ChatGPT-Kontotest.
+- [x] Paketbuilder mit offiziellen Schemas; verweigert unbekannte Anbieterangaben.
+- [ ] Tatsächliche Anbieter-/Rechtsangaben vervollständigen. Statusseiten sind keine fertigen Rechtstexte.
+- [ ] Verifiziertes OpenAI-Konto verbinden, IP-Origin/Port im Portal prüfen, echten Challenge-Token bereitstellen, Hosttests durchführen.
+- [ ] Review einreichen und Freigabe/Veröffentlichung verifizieren.

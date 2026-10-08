@@ -1,3 +1,9 @@
+# Release-Kandidat 0.2.0-rc.2
+
+Geschlossene HTTPS-Testversion, Stand 8. Oktober 2026. Aktueller Aufbau, Testzugang und externe Nachweise: [HTTPS-PREVIEW.md](HTTPS-PREVIEW.md). Öffentlicher Testendpunkt ist vorhanden; öffentliche ChatGPT-Einreichung/Verzeichnisfreigabe nicht erfolgt.
+
+## Historischer privater Kandidat 0.2.0-rc.1
+
 # Release-Kandidat 0.2.0-rc.1
 
 Stand 2026-10-08. Technischer Kandidat mit selbst gehosteter Anmeldung; keine Freigabe oder Einreichung im ChatGPT-Verzeichnis.
@@ -25,7 +31,7 @@ Bestätigte Vorgänge bleiben nach Trennen/Neustart erhalten. Nur notwendige Fel
 
 ## Öffentliche Freigabe
 
-Noch notwendig und nicht durch erfundene Angaben ersetzbar:
+Für den historischen privaten Stand noch notwendig gewesen; HTTPS ist inzwischen implementiert. Tatsächliche Anbieter-/OpenAI-Kontovoraussetzungen bleiben offen:
 
 - Kontrollierte HTTPS-Adresse mit gültigem Zertifikat, TLS-Proxy, Betrieb/Backup und verifiziertem SSH-Hostschlüssel. Die reine IP und lokale Beispiel-Origin reichen nicht.
 - Tatsächlicher Anbieter mit Anschrift, Datenschutz-/Nutzungsbedingungen und Support. Repository-Kontoname ist keine bestätigte Anbieteridentität.

@@ -71,5 +71,7 @@ report = {
     'data_path_exists': os.path.exists('/var/lib/dranbleib'),
     'opt_disk_usage': disk,
     'existing_app_changes': False,
+    'reviewer_credentials_file_present':Path('/var/lib/dranbleib-ops/reviewer.json').is_file(),
+    'reviewer_credentials_file_mode':oct(Path('/var/lib/dranbleib-ops/reviewer.json').stat().st_mode & 0o777) if Path('/var/lib/dranbleib-ops/reviewer.json').is_file() else None,
 }
 print(json.dumps(report, indent=2))

@@ -46,5 +46,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v0.2.0-rc.1 artifacts/dranbleib-review-preparation.zip artifacts/dranbleib-review-preparation.sha256 --target "$GITHUB_SHA" --prerelease --title 'Dranbleib 0.2.0-rc.1 – technischer Release-Kandidat' --notes-file submission/RELEASE-NOTES.md
-          gh release view v0.2.0-rc.1 --json url,isDraft,isPrerelease,assets --jq '{url,isDraft,isPrerelease,assets:[.assets[]|{name,size,state}]}'
+          gh release create v0.2.0-rc.2 artifacts/dranbleib-review-preparation.zip artifacts/dranbleib-review-preparation.sha256 --target "$GITHUB_SHA" --prerelease --title 'Dranbleib 0.2.0-rc.2 – technischer Release-Kandidat' --notes-file submission/RELEASE-NOTES.md
+          gh release view v0.2.0-rc.2 --json url,isDraft,isPrerelease,assets --jq '{url,isDraft,isPrerelease,assets:[.assets[]|{name,size,state}]}'

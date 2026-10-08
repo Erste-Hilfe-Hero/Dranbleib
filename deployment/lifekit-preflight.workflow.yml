@@ -51,6 +51,17 @@ jobs:
           # Inventory executes from stdin: no project/server files are installed.
           ssh -i /tmp/nyr-web/key -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/dranbleib-known-hosts" -o ConnectTimeout=20 "root@$VPS_HOST" 'python3 -' < project/deployment/contabo-preflight.py > "$RUNNER_TEMP/dranbleib-preflight.json"
           python -m json.tool "$RUNNER_TEMP/dranbleib-preflight.json"
+      - name: Verify the closed public preview and review media without credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error https://161.97.102.171:8443/health
+          curl --fail --silent --show-error https://161.97.102.171:8443/.well-known/oauth-protected-resource/mcp
+          curl --fail --silent --show-error https://161.97.102.171:8443/review/walkthrough.mp4 -o "$RUNNER_TEMP/dranbleib-public-walkthrough.mp4"
+          EXPECTED=$(sha256sum project/assets/walkthrough.mp4 | cut -d' ' -f1)
+          ACTUAL=$(sha256sum "$RUNNER_TEMP/dranbleib-public-walkthrough.mp4" | cut -d' ' -f1)
+          test "$EXPECTED" = "$ACTUAL"
+          echo "PASS public TLS, discovery and exact review video checksum"
       - name: Upload inventory only
         uses: actions/upload-artifact@v4
         with:

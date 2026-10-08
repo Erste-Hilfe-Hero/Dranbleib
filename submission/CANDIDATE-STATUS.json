@@ -1,12 +1,12 @@
 {
-  "kind": "verified-private-release-candidate",
-  "version": "0.2.0-rc.1",
+  "kind": "verified-closed-https-preview",
+  "version": "0.2.0-rc.2",
   "date_utc": "2026-10-08",
-  "installed_source_commit": "55104624ce00511414aec6e93afa69c0e9e57cfe",
-  "runner_url": "https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37737261844",
-  "service": "dranbleib-release",
-  "listen": "127.0.0.1:8791",
-  "node_tests_passed": 15,
+  "installed_source_commit": "b5fba1c",
+  "runner_url": "https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37813599586",
+  "service": "dranbleib-preview",
+  "listen": "127.0.0.1:8792",
+  "node_tests_passed": 19,
   "archive_tests_passed": 6,
   "browser_and_simulated_mcp_host_passed": true,
   "oauth_browser_with_simulated_https_passed": true,
@@ -14,14 +14,20 @@
   "known_production_dependency_vulnerabilities": 0,
   "existing_services_preserved": true,
   "synthetic_accounts_deleted": true,
-  "public_https_available": false,
+  "public_https_available": true,
   "actual_chatgpt_test_performed": false,
   "openai_submitted": false,
   "openai_published": false,
   "pending": [
-    "controlled HTTPS origin and TLS",
-    "actual publisher/legal details",
-    "verified OpenAI account and actual ChatGPT test",
-    "portal domain challenge and review materials"
-  ]
+    "actual publisher/address/contact and final legal texts",
+    "verified OpenAI account and actual ChatGPT tests",
+    "portal IP-origin and domain-challenge acceptance",
+    "review submission and OpenAI approval"
+  ],
+  "public_origin": "https://161.97.102.171:8443",
+  "mcp_url": "https://161.97.102.171:8443/mcp",
+  "public_signup_available": false,
+  "reviewer_account_prepared": true,
+  "reviewer_credentials_in_package": false,
+  "review_media_prepared": true
 }
