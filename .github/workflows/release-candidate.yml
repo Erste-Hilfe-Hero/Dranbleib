@@ -1,0 +1,50 @@
+name: Dranbleib verified GitHub prerelease
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: dranbleib-github-prerelease
+  cancel-in-progress: false
+jobs:
+  publish-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.19.0
+      - name: Verify the exact manually dispatched source
+        run: |
+          npm ci
+          npm run check
+          npm test
+          python -m unittest discover -s test -p '*_test.py'
+          CHROMIUM_PATH=/usr/bin/google-chrome npm run test:ui
+          CHROMIUM_PATH=/usr/bin/google-chrome npm run test:oauth-ui
+          npm audit --omit=dev --audit-level=moderate
+      - name: Build a preparation package without credentials or runtime data
+        run: |
+          npm run package:review
+          python - <<'PY'
+          import zipfile
+          from pathlib import Path
+          import hashlib
+          p=Path('artifacts/dranbleib-review-preparation.zip')
+          with zipfile.ZipFile(p) as z:
+              assert z.testzip() is None
+              assert not any(n.endswith(('.sqlite','.sqlite-wal','.sqlite-shm','.pem','.key','.pyc')) or n.startswith(('data/','node_modules/','.git/')) or (n.startswith('.env') and n!='.env.example') for n in z.namelist())
+          Path('artifacts/dranbleib-review-preparation.sha256').write_text(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n')
+          PY
+      - name: Publish only the clearly marked GitHub candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.2.0-rc.1 artifacts/dranbleib-review-preparation.zip artifacts/dranbleib-review-preparation.sha256 --target "$GITHUB_SHA" --prerelease --title 'Dranbleib 0.2.0-rc.1 – technischer Release-Kandidat' --notes-file submission/RELEASE-NOTES.md
+          gh release view v0.2.0-rc.1 --json url,isDraft,isPrerelease,assets --jq '{url,isDraft,isPrerelease,assets:[.assets[]|{name,size,state}]}'
