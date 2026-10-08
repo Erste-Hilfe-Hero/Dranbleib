@@ -38,7 +38,7 @@ def assert_archive_safe(archive):
         path = Path(member.name)
         if path.is_absolute() or '..' in path.parts or member.issym() or member.islnk() or not (member.isfile() or member.isdir()):
             raise RuntimeError('Archive has unsafe entries.')
-        if path.parts and path.parts[0] not in {'src', 'public', 'node_modules', 'runtime', 'package.json', 'package-lock.json', 'scripts'}:
+        if path.parts and path.parts[0] not in {'src', 'public', 'node_modules', 'runtime', 'package.json', 'package-lock.json', 'scripts', 'assets'}:
             raise RuntimeError('Unexpected archive content.')
 
 

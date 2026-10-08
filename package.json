@@ -11,10 +11,12 @@
     "dev": "node --watch src/server.js",
     "test": "node --test test/*.test.js",
     "test:ui": "node test/ui.mjs",
-    "check": "node --check src/server.js && node --check src/domain.js && node --check public/app.js && node --check src/oauth.js && node --check src/release-server.js && node --check src/https-proxy.js && node --check scripts/account-admin.js",
+    "check": "node --check src/server.js && node --check src/domain.js && node --check public/app.js && node --check src/oauth.js && node --check src/release-server.js && node --check src/https-proxy.js && node --check scripts/account-admin.js && node --check scripts/submission.js",
     "package:review": "node scripts/package-review.js",
     "start:release": "node src/release-server.js",
-    "test:oauth-ui": "node test/oauth-ui.mjs"
+    "test:oauth-ui": "node test/oauth-ui.mjs",
+    "package:media": "node scripts/brand-assets.js && DRANBLEIB_RECORD_VIDEO=1 node test/ui.mjs",
+    "package:submission": "node scripts/submission.js"
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "2.0.3",
@@ -24,6 +26,8 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@playwright/test": "1.63.0"
+    "@playwright/test": "1.63.0",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
   }
 }

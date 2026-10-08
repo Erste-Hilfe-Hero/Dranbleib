@@ -27,12 +27,14 @@ export function startReleaseServer({publicOrigin=process.env.PUBLIC_ORIGIN,port=
   const backendOrigin='http://127.0.0.1:'+http?.address()?.port;
   if(![origin.host,new URL(backendOrigin).host].includes(req.headers.host))return res.status(403).json({error:'Unzulässiger Host.'});
   if(req.headers.origin&&! [origin.origin,backendOrigin].includes(req.headers.origin))return res.status(403).json({error:'Unzulässiger Ursprung.'});
-  res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');res.setHeader('Content-Security-Policy',"default-src 'none'; style-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");next();
+  res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');res.setHeader('Content-Security-Policy',"default-src 'none'; style-src 'self'; img-src 'self'; media-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");next();
  });
  const authOptions={provider,issuerUrl:origin,resourceServerUrl:new URL(provider.resource),scopesSupported:SCOPES,resourceName:'Dranbleib'};
  const authMetadata={...createOAuthMetadata(authOptions),token_endpoint_auth_methods_supported:['none'],revocation_endpoint_auth_methods_supported:['none']};
  app.get('/.well-known/oauth-authorization-server',(_req,res)=>res.json(authMetadata));
  app.use(mcpAuthRouter(authOptions));
+ app.get('/assets/:name',(req,res)=>{if(!['icon.png','icon-dark.png','logo.png','logo-dark.png','screenshot.png'].includes(req.params.name))return res.status(404).end();const file=resolve(ROOT,'assets',req.params.name);if(!existsSync(file))return res.status(404).end();res.type('png').send(readFileSync(file));});
+ app.get('/review/walkthrough.mp4',(_req,res)=>{const file=resolve(ROOT,'assets/walkthrough.mp4');if(!existsSync(file))return res.status(404).end();res.type('video/mp4').send(readFileSync(file));});
  app.get('/style.css',(_req,res)=>res.type('css').send(readFileSync(resolve(ROOT,'public/style.css'),'utf8')));
  app.use('/consent',rateLimit({windowMs:600000,max:20,standardHeaders:true,legacyHeaders:false}));
  app.get('/consent',(req,res)=>{
@@ -67,7 +69,7 @@ export function startReleaseServer({publicOrigin=process.env.PUBLIC_ORIGIN,port=
  app.get('/terms',(_req,res)=>res.send(page('Nutzungsstand','<p>Technische Testversion ohne zugesicherte Verfügbarkeit. Vorschläge und Fristen selbst am Original prüfen. Keine Rechtsberatung, keine Hintergrundüberwachung oder Nachrichtenzustellung. Tatsächlicher Vertragspartner und finale Nutzungsbedingungen sind noch offen.</p>')));
  app.get('/support',(_req,res)=>res.send(page('Technische Unterstützung','<p><a href="https://github.com/Erste-Hilfe-Hero/Dranbleib/issues">Technischen Fehler auf GitHub melden</a>. Dort keine personenbezogenen Inhalte, Briefe, Passwörter oder Tokens veröffentlichen. Rechtlicher Anbieter- und Datenschutzkontakt ist noch offen.</p>')));
  app.get('/health',(_req,res)=>res.json({status:'ok',mode:'authenticated-release-candidate'}));
- app.get('/',(_req,res)=>res.send(page('Authentifizierter Release-Kandidat','<p>Dranbleib verwaltet bestätigte Vorgänge mit Quellenbelegen. Zugang über eine OAuth-geschützte MCP-Verbindung in ChatGPT. Diese Kandidatenversion ist noch nicht öffentlich freigegeben.</p><p><a href="/account/delete">Eigenes Konto löschen</a></p>')));
+ app.get('/',(_req,res)=>res.send(page('Authentifizierter Release-Kandidat','<p>Dranbleib verwaltet bestätigte Vorgänge mit Quellenbelegen. Zugang über eine OAuth-geschützte MCP-Verbindung in ChatGPT. Diese Kandidatenversion ist noch nicht öffentlich freigegeben.</p><p><a href="/review/walkthrough.mp4">Video der lokal geprüften Demo</a> · <a href="/account/delete">Eigenes Konto löschen</a></p>')));
  app.use((_req,res)=>res.status(404).json({error:'Nicht gefunden.'}));
  app.use((_error,_req,res,_next)=>{if(!res.headersSent)res.status(400).json({error:'Anfrage nicht verarbeitet.'});});
  http=app.listen(port,'127.0.0.1');

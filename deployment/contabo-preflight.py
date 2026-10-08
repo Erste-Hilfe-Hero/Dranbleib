@@ -29,6 +29,13 @@ _, disk = command(['df', '-Pk', '/opt'])
 _, containers = command(['docker','ps','--format','{{.Names}}\t{{.Image}}\t{{.Ports}}'])
 _, certificate = command(['openssl','x509','-in','/etc/letsencrypt/live/nyrathen-contabo-eu/fullchain.pem','-noout','-dates','-ext','subjectAltName'])
 _, firewall = command(['ufw','status'])
+renewal=Path('/etc/letsencrypt/renewal/nyrathen-contabo-eu.conf')
+renewal_public={}
+if renewal.is_file():
+    for k,v in re.findall(r'(?m)^\s*(authenticator|webroot_path|server)\s*=\s*(.+)$',renewal.read_text()):
+        renewal_public[k]=v.strip()
+_, proxy_mounts=command(['docker','inspect','--format','{{range .Mounts}}{{.Source}} -> {{.Destination}}\n{{end}}','nyrathen-proxy'])
+_, renew_unit=command(['systemctl','show','nyrathen-certbot-renew.service','-p','FragmentPath','-p','Result','-p','ExecMainStatus'])
 domains=set()
 for folder in ['/etc/nginx/sites-enabled','/etc/nginx/conf.d']:
     p=Path(folder)
@@ -46,6 +53,9 @@ report = {
     'ports_in_use':{str(p):probe_port(p) for p in [80,443,8443,8790,8791]},
     'proxy_binaries':{p:bool(shutil.which(p)) for p in ['caddy','nginx','docker','certbot']},
     'public_certificate_metadata':certificate,
+    'renewal_public_configuration':renewal_public,
+    'proxy_mount_paths':proxy_mounts,
+    'renewal_service_status':renew_unit,
     'containers_public_metadata':containers,
     'firewall_status':firewall,
     'certificate_names':sorted(p.name for p in Path('/etc/letsencrypt/live').glob('*') if p.is_dir()),

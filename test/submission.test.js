@@ -1,0 +1,6 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {buildMetadata,configSchema} from '../scripts/submission.js';
+test('Einreichung blockiert unbekannte Anbieterangaben und unbestätigte Rechtstexte',()=>{const draft=JSON.parse(readFileSync('submission/provider.example.json','utf8'));assert.equal(configSchema.safeParse(draft).success,false);assert.throws(()=>buildMetadata(draft));});
+test('Metadaten gegen aktuelle offizielle Plugin-/MCP-Schemas geprüft; keine Zugangsdatenfelder',()=>{const synthetic={providerName:'Synthetischer Testanbieter',providerAddress:'Synthetische Testanschrift – keine öffentliche Einreichung',supportEmail:'synthetic@tests.invalid',websiteURL:'https://tests.invalid',privacyPolicyURL:'https://tests.invalid/privacy',termsOfServiceURL:'https://tests.invalid/terms',mcpURL:'https://tests.invalid/mcp',recordingURL:'https://tests.invalid/video',providerConfirmed:true};const {plugin,mcp}=buildMetadata(synthetic);assert.equal(mcp.mcpServers.dranbleib.url,synthetic.mcpURL);assert.equal(plugin.author.name,synthetic.providerName);assert.ok(plugin.extensions['com.openai'].interface.logo);assert.equal(configSchema.safeParse({...synthetic,password:'do-not-store'}).success,false);});

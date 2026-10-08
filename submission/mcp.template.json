@@ -3,7 +3,7 @@
   "mcpServers": {
     "dranbleib": {
       "type": "streamable-http",
-      "url": "<PUBLIC_HTTPS_MCP_URL>"
+      "url": "https://161.97.102.171:8443/mcp"
     }
   }
 }

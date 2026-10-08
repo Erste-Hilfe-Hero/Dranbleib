@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dranbleib",
-  "version": "0.1.0",
+  "version": "0.2.0-rc.2",
   "description": "Offene Zusagen aus ausgewähltem Text prüfen, nachverfolgen und mit Quellenbelegen verwalten.",
   "keywords": [
     "productivity",
@@ -13,7 +13,7 @@
       "interface": {
         "displayName": "Dranbleib",
         "shortDescription": "Offene Zusagen im Blick behalten",
-        "longDescription": "Dranbleib schlägt aus ausdrücklich ausgewähltem Text Vorgänge vor. Nutzer prüfen und bestätigen Felder und Quellenbelege. Vorgänge verwalten und editierbare Entwürfe erstellen; kein Versand und keine automatische Überwachung. Aktuell nur lokale Entwicklungsdemo.",
+        "longDescription": "Dranbleib schlägt aus ausgewähltem Text überprüfbare Vorgänge mit Quellenbelegen vor. Bestätigte Vorgänge bleiben kontobezogen gespeichert. Entwürfe sind editierbar; kein Versand, keine Überwachung, keine Rechtsberatung. Geschlossene technische Testversion; echte ChatGPT-Prüfung und Anbieterfreigabe stehen aus.",
         "category": "Productivity",
         "capabilities": [
           "Vorgänge erfassen",
@@ -25,7 +25,15 @@
           "Zeige meine wartenden Vorgänge.",
           "Erstelle einen Nachfassentwurf."
         ],
-        "brandColor": "#175E4C"
+        "brandColor": "#175E4C",
+        "brandColorDark": "#C9E7D6",
+        "composerIcon": "./assets/icon.png",
+        "composerIconDark": "./assets/icon-dark.png",
+        "logo": "./assets/logo.png",
+        "logoDark": "./assets/logo-dark.png",
+        "screenshots": [
+          "./assets/screenshot.png"
+        ]
       },
       "review": {
         "test_cases": {

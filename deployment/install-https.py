@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Separate unprivileged Node TLS service on free 8443, never touch game proxy."""
 import json
+import argparse
 import os
 from pathlib import Path
 import pwd
@@ -15,9 +16,15 @@ def run(*args):return subprocess.run(args,check=True,capture_output=True,text=Tr
 
 def running():return {l.split()[0] for l in run('systemctl','list-units','--type=service','--state=running','--no-legend','--plain').splitlines() if l.strip()}-{'dranbleib-https.service','dranbleib-certificate-sync.service'}
 def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--verify-existing',action='store_true');args=parser.parse_args()
  if os.geteuid()!=0:raise RuntimeError('Expected authorized root installer.')
  if BASE.is_symlink() or (BASE.exists() and not (BASE/'dranbleib-managed').is_file()):raise RuntimeError('Unmanaged proxy path.')
- if UNIT.exists():raise RuntimeError('TLS service already exists; inspect before reinstalling.')
+ if UNIT.exists():
+  if not args.verify_existing or 'Description=Dranbleib separate HTTPS preview' not in UNIT.read_text() or not (BASE/'dranbleib-managed').is_file():raise RuntimeError('TLS service already exists; inspect before reinstalling.')
+  before=running();run('systemctl','restart','dranbleib-https.service')
+  with urllib.request.urlopen(ORIGIN+'/health',timeout=5) as r:health=json.load(r)
+  if health.get('status')!='ok' or before-running():raise RuntimeError('Existing TLS preview verification failed.')
+  print(json.dumps({'status':'https-preview-existing-verified','origin':ORIGIN,'existing_services_preserved':True,'production_published':False}));return
  for name in ['dranbleib-certificate-sync.service','dranbleib-certificate-sync.timer']:
   if Path('/etc/systemd/system',name).exists():raise RuntimeError('Certificate helper already exists; inspect before reinstalling.')
  with socket.socket() as s:

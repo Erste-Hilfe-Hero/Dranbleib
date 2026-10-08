@@ -50,7 +50,7 @@ jobs:
           python - <<'PY'
           import tarfile
           with tarfile.open('../dranbleib-release.tar.gz', 'w:gz', dereference=True) as archive:
-              for path in ['src', 'public', 'node_modules', 'runtime', 'scripts', 'package.json', 'package-lock.json']:
+              for path in ['src', 'public', 'node_modules', 'runtime', 'scripts', 'assets', 'package.json', 'package-lock.json']:
                   archive.add(path)
           PY
       - name: Obtain the existing Contabo SSH access inside the runner only
@@ -79,7 +79,7 @@ jobs:
           ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "mkdir -m 700 '$REMOTE_DIR'"
           scp "${SSH_OPTIONS[@]}" dranbleib-release.tar.gz project/deployment/install-private.py project/deployment/smoke-release.mjs project/deployment/install-https.py project/deployment/sync-certificate.py "root@$VPS_HOST:$REMOTE_DIR/"
           ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "python3 '$REMOTE_DIR/install-private.py' --archive '$REMOTE_DIR/dranbleib-release.tar.gz' --sha256 '$ARCHIVE_SHA' --commit '$SOURCE_COMMIT' --mode preview --public-origin https://161.97.102.171:8443" > "$RUNNER_TEMP/dranbleib-install.json"
-          ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "python3 '$REMOTE_DIR/install-https.py'" > "$RUNNER_TEMP/dranbleib-https.json"
+          ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "python3 '$REMOTE_DIR/install-https.py' --verify-existing" > "$RUNNER_TEMP/dranbleib-https.json"
           ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "/opt/dranbleib-preview/current/runtime/node /opt/dranbleib-preview/current/scripts/account-admin.js --data /var/lib/dranbleib-preview/dranbleib.sqlite --origin https://161.97.102.171:8443 --count 2 --credentials-out '$REMOTE_DIR/smoke-credentials.json'"
           scp "${SSH_OPTIONS[@]}" "root@$VPS_HOST:$REMOTE_DIR/smoke-credentials.json" "$RUNNER_TEMP/dranbleib-smoke-credentials.json"
           chmod 600 "$RUNNER_TEMP/dranbleib-smoke-credentials.json"
