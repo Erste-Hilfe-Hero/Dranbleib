@@ -64,6 +64,10 @@ Ein echter ChatGPT-/Entwicklermodus-Test wurde **nicht durchgeführt**: kein ver
 
 ## Git- und Veröffentlichungsstatus
 
-Neues lokales Repository, Branch `main`, Checkpoint-Commits vorhanden. Kein Git-Remote konfiguriert; **nicht gepusht**. GitHub-Zugriff/Remote muss vom Nutzer für dieses Projekt verbunden und autorisiert werden. Kein Hosting eingerichtet, keine Kosten ausgelöst, nicht eingereicht und nicht veröffentlicht. OpenAI-Entwicklerverifizierung, Produktions-OAuth, rechtliche Angaben, Testkonto und endgültige Freigabe stehen aus.
+Neues lokales Repository, Branch `main`, Checkpoint-Commits vorhanden. GitHub-Login **Erste-Hilfe-Hero** am 2026-10-08 über Connector und CLI verifiziert. Der Nutzer hat die Erstellung eines neuen Repositories autorisiert. Die Erstellung von **Erste-Hilfe-Hero/dranbleib** als privates Repository wurde tatsächlich versucht; GitHub antwortete `Resource not accessible by integration (createRepository)`. Die verbundene Integration darf bestehende freigegebene Repositories beschreiben, aber diesen Erstellungsaufruf nicht ausführen. **Kein Repository erstellt und nichts gepusht.** Nach Anlage des privaten Zielrepositories und Freigabe für die Integration kann der lokale Stand übertragen werden.
+
+Keine Contabo-Installation, kein öffentliches Hosting, keine Einreichung und keine Veröffentlichung. VPS-IP/Hostname, SSH-Benutzer und sicher verbundener SSH-Zugang fehlen. OpenAI-Entwicklerverifizierung, Produktions-OAuth, rechtliche Angaben und ChatGPT-Testkonto stehen ebenfalls aus.
 
 Contabo ist als Hostinganbieter vom Nutzer erlaubt. Noch kein Serverzugang oder Zielhost verbunden; keine Bestellung oder Veröffentlichung. [Contabo-Vorbereitung und benötigte Angaben](docs/CONTABO.md).
+
+Privater VPS-Betrieb: [systemd-Vorlage und Installation](deployment/README.md). Diese wurde vorbereitet, aber nicht auf Contabo ausgeführt.

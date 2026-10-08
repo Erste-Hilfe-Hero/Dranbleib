@@ -38,4 +38,4 @@ Stand: 2026-10-07. Keine Veröffentlichung, kein autorisiertes Entwicklerkonto u
 
 ## GitHub
 
-Lokal Branch main; Checkpoints vorhanden. Kein Git-Remote und keine gebundene GitHub-Identität für dieses Projekt. Push blockiert, bis ein bereits verbundenes, autorisiertes Zielrepository tatsächlich bereitsteht. Keine Repository-Erstellung, kein Push oder Deployment erfolgt.
+Login Erste-Hilfe-Hero und Schreibrechte auf sechs bestehende Repositories am 2026-10-08 verifiziert. Nutzer hat ein neues privates Repository autorisiert. `gh repo create Erste-Hilfe-Hero/dranbleib --private` scheiterte tatsächlich mit `Resource not accessible by integration (createRepository)`. Kein Repository erstellt, kein Remote und kein Push. Zielrepository mit einem zur Erstellung berechtigten Zugang anlegen und der Integration freigeben; dann übertragen. Bestehende fremde Anwendungen nicht als Ersatz verwenden.

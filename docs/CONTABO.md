@@ -18,4 +18,8 @@ Für eine öffentliche ChatGPT-Verbindung zuerst den Produktionspfad implementie
 - Bei Neubestellung zuerst konkrete Tarif-/Budgetfreigabe; bislang keine Bestellung autorisiert oder ausgelöst.
 - OAuth-Anbieter bzw. verbundene Identitätskonfiguration vor dauerhafter öffentlicher Nutzerdatenspeicherung.
 
-Contabo-Zugang ersetzt weder GitHub-Zugriff noch ein verifiziertes OpenAI-Entwicklerkonto. GitHub-Push, ChatGPT-Kontotest und Einreichung bleiben getrennte offene Voraussetzungen.
+GitHub-Connector ist inzwischen für Erste-Hilfe-Hero verifiziert. Neues Ziel Erste-Hilfe-Hero/dranbleib vom Nutzer autorisiert, aber Erstellung durch die GitHub-Integration abgelehnt (createRepository). Contabo-Zugang und verifiziertes OpenAI-Entwicklerkonto sind weiterhin nicht vorhanden.
+
+## Vorbereitet am 2026-10-08
+
+Privater systemd-Betrieb ist unter deployment/ dokumentiert: eigener Dienstbenutzer, private Datenhaltung, Loopback-Listener und SSH-Portweiterleitung. Die Servicevorlage wurde nicht auf einem Zielserver installiert. Zielserver und Zugänge fehlen weiterhin.

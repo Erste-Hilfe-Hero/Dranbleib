@@ -42,3 +42,9 @@ Geprüfte Umgebung: Node 24.19.0, npm 11.9.0, Linux, System-Chromium über Playw
 - `934a4ad`: Inventar, Architektur und offizielle Quellen.
 - `eb8d50d`: implementierte Demo, Tests, Setup, Metadatenvorlagen und Einreichungscheckliste.
 - Abschließender Dokumentationscheckpoint: im lokalen `git log` sichtbar. Kein Remote und kein Push.
+
+## Erneute Prüfung am 2026-10-08
+
+`npm run check`, alle neun Tests sowie Browserablauf und MCP-Apps-Hostsimulation erneut bestanden. Der GitHub-Connector meldet den authentifizierten Nutzer Erste-Hilfe-Hero und sechs zugängliche Repositories mit Schreibberechtigung. Kein eindeutig zugeordnetes Dranbleib-Ziel gefunden; kein Push ausgeführt. Die Contabo-systemd-Vorlage ist vorbereitet, aber ohne verbundenen VPS nicht getestet oder installiert.
+
+Der Nutzer hat anschließend ein neues Repository autorisiert. GitHub-CLI-Login funktioniert; der tatsächliche private Erstellungsversuch für Erste-Hilfe-Hero/dranbleib wurde mit `Resource not accessible by integration (createRepository)` abgelehnt. Kein Push.

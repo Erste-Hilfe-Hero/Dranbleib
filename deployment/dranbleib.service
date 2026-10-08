@@ -1,0 +1,30 @@
+[Unit]
+Description=Dranbleib private local MCP demo
+After=network.target
+
+[Service]
+Type=simple
+User=dranbleib
+Group=dranbleib
+WorkingDirectory=/opt/dranbleib
+ExecStart=/usr/bin/node /opt/dranbleib/src/server.js
+Environment=NODE_ENV=production
+Environment=PORT=8787
+Environment=DATA_PATH=/var/lib/dranbleib/dranbleib.sqlite
+StateDirectory=dranbleib
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target
