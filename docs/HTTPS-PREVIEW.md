@@ -33,3 +33,5 @@ Die Statusseiten `/privacy` und `/terms` benennen wahrheitsgemäß den unfertige
 ## Abschließende Nachweise
 
 Medien-/Kandidatencode `b5fba1cd6e0f29a3bc936068fa5af4b9045342cc` über Runner 37813599586 installiert. Read-only-Audit 37814175441 bestätigt öffentliches TLS/Discovery, exakt gleiche Video-Prüfsumme, private Reviewerdatei mit 0600 und letzten Quellzertifikat-Erneuerungslauf `Result=success`, `ExecMainStatus=0`. GitHub-Vorabversion [0.2.0-rc.2](https://github.com/Erste-Hilfe-Hero/Dranbleib/releases/tag/v0.2.0-rc.2) mit Vorbereitungspaket und SHA256-Datei veröffentlicht; Runner 37814184718 bestanden. Keine OpenAI-Einreichung oder Verzeichnisveröffentlichung.
+
+Letzter installierter App-Code: `6760616daa325129c76b5af515de8b7fa97ab832`, Runner https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37815046527 bestanden. Der öffentliche Datenschutzstand erläutert zusätzlich die private Klartext-Datei für erzeugte Betreiber-Testzugänge; normale Kontopasswörter bleiben gehasht. Sonstige Test-/Zertifikats-/Datentrennungsnachweise unverändert.
