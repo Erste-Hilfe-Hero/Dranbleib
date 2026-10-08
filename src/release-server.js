@@ -1,10 +1,10 @@
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { randomBytes, timingSafeEqual, createHash, randomUUID } from 'node:crypto';
-import { readFileSync, mkdirSync, realpathSync } from 'node:fs';
+import { readFileSync, mkdirSync, realpathSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { mcpAuthRouter, getOAuthProtectedResourceMetadataUrl } from '@modelcontextprotocol/sdk/server/auth/router.js';
+import { mcpAuthRouter, createOAuthMetadata, getOAuthProtectedResourceMetadataUrl } from '@modelcontextprotocol/sdk/server/auth/router.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { Store } from './domain.js';
@@ -29,7 +29,10 @@ export function startReleaseServer({publicOrigin=process.env.PUBLIC_ORIGIN,port=
   if(req.headers.origin&&! [origin.origin,backendOrigin].includes(req.headers.origin))return res.status(403).json({error:'Unzulässiger Ursprung.'});
   res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('Content-Security-Policy',"default-src 'none'; style-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");next();
  });
- app.use(mcpAuthRouter({provider,issuerUrl:origin,resourceServerUrl:new URL(provider.resource),scopesSupported:SCOPES,resourceName:'Dranbleib'}));
+ const authOptions={provider,issuerUrl:origin,resourceServerUrl:new URL(provider.resource),scopesSupported:SCOPES,resourceName:'Dranbleib'};
+ const authMetadata={...createOAuthMetadata(authOptions),token_endpoint_auth_methods_supported:['none'],revocation_endpoint_auth_methods_supported:['none']};
+ app.get('/.well-known/oauth-authorization-server',(_req,res)=>res.json(authMetadata));
+ app.use(mcpAuthRouter(authOptions));
  app.get('/style.css',(_req,res)=>res.type('css').send(readFileSync(resolve(ROOT,'public/style.css'),'utf8')));
  app.use('/consent',rateLimit({windowMs:600000,max:20,standardHeaders:true,legacyHeaders:false}));
  app.get('/consent',(req,res)=>{
@@ -66,4 +69,4 @@ export function startReleaseServer({publicOrigin=process.env.PUBLIC_ORIGIN,port=
  const timer=setInterval(()=>{provider.prune();store.prune();for(const [k,expiry] of formSessions)if(expiry<Date.now())formSessions.delete(k);for(const [id,e] of sessions)if(e.expires<=Date.now()){sessions.delete(id);e.transport.close();e.server.close();}},30000);timer.unref();
  return {http,store,provider,async close(){clearInterval(timer);for(const e of sessions.values()){await e.transport.close();await e.server.close();}await new Promise(r=>http.close(r));store.close();}};
 }
-if(process.argv[1]&&realpathSync(process.argv[1])===fileURLToPath(import.meta.url)){const app=startReleaseServer();app.http.on('listening',()=>console.log('Dranbleib authentifizierter Release-Kandidat gestartet (Loopback).'));for(const sig of ['SIGINT','SIGTERM'])process.on(sig,async()=>{await app.close();process.exit(0);});}
+if(process.argv[1]&&existsSync(process.argv[1])&&realpathSync(process.argv[1])===fileURLToPath(import.meta.url)){const app=startReleaseServer();app.http.on('listening',()=>console.log('Dranbleib authentifizierter Release-Kandidat gestartet (Loopback).'));for(const sig of ['SIGINT','SIGTERM'])process.on(sig,async()=>{await app.close();process.exit(0);});}

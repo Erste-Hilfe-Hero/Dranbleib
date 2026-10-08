@@ -1,5 +1,5 @@
 import { createServer } from 'node:http';
-import { readFileSync, mkdirSync, chmodSync, realpathSync } from 'node:fs';
+import { readFileSync, mkdirSync, chmodSync, realpathSync, existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
@@ -105,7 +105,7 @@ export function startServer({port=Number(process.env.PORT??8787),dataPath=proces
  http.listen(port,'127.0.0.1');
  return {http,local,mcpStore,async close(){clearInterval(timer);for(const e of sessions.values()){await e.transport.close();await e.server.close();}await new Promise(r=>http.close(r));local.close();mcpStore.close();}};
 }
-if(process.argv[1] && realpathSync(process.argv[1])===fileURLToPath(import.meta.url)) {
+if(process.argv[1] && existsSync(process.argv[1]) && realpathSync(process.argv[1])===fileURLToPath(import.meta.url)) {
  const instance=startServer();
  instance.http.on('listening',()=>console.log(`Dranbleib Entwicklungsdemo: http://127.0.0.1:${instance.http.address().port} (MCP: /mcp)`));
  for(const signal of ['SIGINT','SIGTERM'])process.on(signal,async()=>{await instance.close();process.exit(0);});
