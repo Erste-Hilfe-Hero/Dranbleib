@@ -21,7 +21,11 @@ def main():
  if BASE.is_symlink() or (BASE.exists() and not (BASE/'dranbleib-managed').is_file()):raise RuntimeError('Unmanaged proxy path.')
  if UNIT.exists():
   if not args.verify_existing or 'Description=Dranbleib separate HTTPS preview' not in UNIT.read_text() or not (BASE/'dranbleib-managed').is_file():raise RuntimeError('TLS service already exists; inspect before reinstalling.')
-  before=running();run('systemctl','restart','dranbleib-https.service')
+  before=running()
+  sync=BASE/'sync-certificate.py';sync.write_bytes(Path(__file__).with_name('sync-certificate.py').read_bytes());sync.chmod(0o644);run('python3',str(sync))
+  UNIT.write_text(UNIT.read_text().replace('/var/lib/dranbleib-https/tls','/etc/dranbleib-https/tls'))
+  helper=Path('/etc/systemd/system/dranbleib-certificate-sync.service');helper.write_text(helper.read_text().replace('ReadWritePaths=/var/lib/dranbleib-https','ReadWritePaths=/etc/dranbleib-https'))
+  run('systemctl','daemon-reload');run('systemctl','restart','dranbleib-https.service')
   health={}
   for _ in range(15):
    try:
@@ -30,6 +34,10 @@ def main():
    except (OSError,ValueError):pass
    time.sleep(1)
   if health.get('status')!='ok' or before-running():raise RuntimeError('Existing TLS preview verification failed.')
+  old_tls=Path('/var/lib/dranbleib-https/tls')
+  if old_tls.is_dir() and not old_tls.is_symlink():
+   for name in ['fullchain.pem','privkey.pem']:(old_tls/name).unlink(missing_ok=True)
+   old_tls.rmdir()
   print(json.dumps({'status':'https-preview-existing-verified','origin':ORIGIN,'existing_services_preserved':True,'production_published':False}));return
  for name in ['dranbleib-certificate-sync.service','dranbleib-certificate-sync.timer']:
   if Path('/etc/systemd/system',name).exists():raise RuntimeError('Certificate helper already exists; inspect before reinstalling.')
@@ -55,7 +63,7 @@ ExecStart=/opt/dranbleib-preview/current/runtime/node /opt/dranbleib-preview/cur
 Environment=PUBLIC_ORIGIN=https://161.97.102.171:8443
 Environment=HTTPS_PORT=8443
 Environment=BACKEND_PORT=8792
-Environment=TLS_DIR=/var/lib/dranbleib-https/tls
+Environment=TLS_DIR=/etc/dranbleib-https/tls
 StateDirectory=dranbleib-https
 StateDirectoryMode=0700
 UMask=0077
@@ -84,7 +92,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
 ProtectSystem=strict
-ReadWritePaths=/var/lib/dranbleib-https
+ReadWritePaths=/etc/dranbleib-https
 ''')
  timer=Path('/etc/systemd/system/dranbleib-certificate-sync.timer');timer.write_text('''[Unit]
 Description=Dranbleib local TLS certificate refresh every five minutes
