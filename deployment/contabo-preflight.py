@@ -3,6 +3,8 @@
 import json
 import os
 import platform
+import re
+from pathlib import Path
 import shutil
 import socket
 import subprocess
@@ -24,7 +26,20 @@ def probe_port(port):
 _, node_version = command(['node', '--version'])
 _, service_status = command(['systemctl', 'is-active', 'dranbleib'])
 _, disk = command(['df', '-Pk', '/opt'])
+domains=set()
+for folder in ['/etc/nginx/sites-enabled','/etc/nginx/conf.d']:
+    p=Path(folder)
+    if p.exists():
+        for file in p.iterdir():
+            if not file.is_file():
+                continue
+            raw=file.read_text(errors='replace')
+            for value in re.findall(r'(?m)^\s*server_name\s+([^;]+);',raw):
+                for host in value.split():
+                    if re.fullmatch(r'[a-zA-Z0-9.-]+',host) and '.' in host:
+                        domains.add(host)
 report = {
+    'configured_nginx_hostnames':sorted(domains),
     'mode': 'read-only-preflight',
     'platform': platform.system(),
     'architecture': platform.machine(),
