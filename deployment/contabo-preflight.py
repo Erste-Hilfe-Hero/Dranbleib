@@ -40,6 +40,9 @@ for folder in ['/etc/nginx/sites-enabled','/etc/nginx/conf.d']:
                         domains.add(host)
 report = {
     'configured_nginx_hostnames':sorted(domains),
+    'ports_in_use':{str(p):probe_port(p) for p in [80,443,8443,8790,8791]},
+    'proxy_binaries':{p:bool(shutil.which(p)) for p in ['caddy','nginx','docker','certbot']},
+    'certificate_names':sorted(p.name for p in Path('/etc/letsencrypt/live').glob('*') if p.is_dir()),
     'mode': 'read-only-preflight',
     'platform': platform.system(),
     'architecture': platform.machine(),
