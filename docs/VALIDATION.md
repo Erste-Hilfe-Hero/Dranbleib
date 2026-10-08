@@ -48,3 +48,11 @@ Geprüfte Umgebung: Node 24.19.0, npm 11.9.0, Linux, System-Chromium über Playw
 `npm run check`, alle neun Tests sowie Browserablauf und MCP-Apps-Hostsimulation erneut bestanden. Der GitHub-Connector meldet den authentifizierten Nutzer Erste-Hilfe-Hero und sechs zugängliche Repositories mit Schreibberechtigung. Kein eindeutig zugeordnetes Dranbleib-Ziel gefunden; kein Push ausgeführt. Die Contabo-systemd-Vorlage ist vorbereitet, aber ohne verbundenen VPS nicht getestet oder installiert.
 
 Der Nutzer hat anschließend ein neues Repository autorisiert. GitHub-CLI-Login funktioniert; der tatsächliche private Erstellungsversuch für Erste-Hilfe-Hero/dranbleib wurde mit `Resource not accessible by integration (createRepository)` abgelehnt. Kein Push.
+
+## Abschluss nach Runner-/Contabo-Deployment am 2026-10-08
+
+GitHub-Push und neue separate LifeKit-Runneraufträge vom Nutzer freigegeben. Read-only-Inventar erfolgreich (37732812264). Erster Dienststart fehlgeschlagen und zurückgenommen (37733146979); Symlink-Entrypoint korrigiert, echter Prozessstart als zusätzlicher Regressionstest. Aktueller Satz: **10 Node-Tests + 6 Python-Sicherheitstests bestanden**, Browser und MCP-Apps-Hostsimulation erneut fehlerfrei.
+
+**Lauf 37733456055 erfolgreich:** installierter Commit b144fe3ed348d14ea19c1becf0f3965794c20bf2; Service dranbleib, private Adresse 127.0.0.1:8790, Health ok/local-demo. Echte synthetische CRUD-/Entwurfs-/Cookieisolationsprüfung am VPS bestanden, Testdatensatz gelöscht, zuvor laufende Dienste weiterhin aktiv. Keine öffentliche Proxy-/Firewallfreigabe. Kontobasierte OAuth-Trennung und echter ChatGPT-Kontotest bleiben ausdrücklich ungeprüft.
+
+Ein lokaler CLI-Artefaktdownload wurde vom Netzwerkziel abgelehnt; Runnerstatus und inhaltliche Belege wurden über die verbundenen GitHub-Joblog-Tools verifiziert. Keine temporären Download-URLs oder Secretwerte in dieser Dokumentation. Vorbereitungspaket erneut erstellt und auf Laufzeitdaten/Caches geprüft.

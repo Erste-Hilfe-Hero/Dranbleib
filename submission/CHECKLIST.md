@@ -1,6 +1,6 @@
 # Einreichungsstatus: Vorbereitung, nicht eingereicht
 
-Stand: 2026-10-07. Keine Veröffentlichung, kein autorisiertes Entwicklerkonto und kein öffentliches Hosting verfügbar. Die Metadaten sind Entwürfe, keine nachgewiesen vollständige Portal-Einreichung. Es gibt kein altes `ai-plugin.json`.
+Stand: 2026-10-08. Private Contabo-Demo erfolgreich installiert und geprüft; noch keine öffentliche ChatGPT-Veröffentlichung und kein autorisiertes Entwicklerkonto. Die Metadaten sind Entwürfe, keine nachgewiesen vollständige Portal-Einreichung. Es gibt kein altes `ai-plugin.json`.
 
 ## Bereits vorbereitet
 
@@ -14,7 +14,7 @@ Stand: 2026-10-07. Keine Veröffentlichung, kein autorisiertes Entwicklerkonto u
 ## Vor echtem ChatGPT-Test
 
 - [ ] Autorisiertes ChatGPT-Konto/Workspace mit Berechtigung für benutzerdefinierte MCP-Server.
-- [ ] Private Testverbindung: Secure MCP Tunnel (`tunnel_id`, Runtime-API-Key, Tunnels Read/Use, bei Einrichtung Read/Manage, zugeordneter Workspace), oder ausdrücklich freigegebener HTTPS-Testendpunkt.
+- [ ] ChatGPT-Testverbindung zum bereits installierten privaten Dienst: Secure MCP Tunnel (`tunnel_id`, Runtime-API-Key, Tunnels Read/Use, bei Einrichtung Read/Manage, zugeordneter Workspace), oder ausdrücklich freigegebener HTTPS-Testendpunkt.
 - [ ] Keine Demo mit persönlichen Produktivdaten öffentlich zugänglich machen. Host-Prüfung bleibt absichtlich auf Loopback beschränkt; ein Forwarder müsste Host/Origin korrekt erhalten. Keine allgemeine Freigabe durch Weglassen dieser Prüfung.
 - [ ] Den Umgang des Hosts mit stateful MCP-Demositzungen prüfen: Verlust bei Neuverbindung ist erwartet. Für echte Nutzerpersistenz zuerst OAuth umsetzen.
 - [ ] Verbindung: ChatGPT Plugins → + → Add custom MCP server → HTTPS-URL einschließlich /mcp oder vorhandenen Tunnel auswählen → tatsächliche Authentifizierung konfigurieren → Risikohinweis selbst prüfen → installieren → neuen Chat mit @Dranbleib starten. Gegebenenfalls nennt ein Konto diese Funktion noch Entwicklermodus; Konto-/Workspace-Richtlinien gelten.
@@ -36,10 +36,8 @@ Stand: 2026-10-07. Keine Veröffentlichung, kein autorisiertes Entwicklerkonto u
 - [ ] Reviewmaterialien, fünf positive und drei negative getestete Fälle, Video, Konto und tatsächliche Länder-/Sprachauswahl ergänzen. Kein automatisches Bestätigen von Policy-Attestierungen.
 - [ ] **Submit for review** durch autorisierte Person, Entscheidung abwarten; **Publish** getrennt nach Freigabe. Beides ausstehend.
 
-## GitHub
+## GitHub und Contabo
 
-Login Erste-Hilfe-Hero und Schreibrechte auf sechs bestehende Repositories am 2026-10-08 verifiziert. Nutzer hat ein neues privates Repository autorisiert. `gh repo create Erste-Hilfe-Hero/dranbleib --private` scheiterte tatsächlich mit `Resource not accessible by integration (createRepository)`. Kein Repository erstellt, kein Remote und kein Push. Zielrepository mit einem zur Erstellung berechtigten Zugang anlegen und der Integration freigeben; dann übertragen. Bestehende fremde Anwendungen nicht als Ersatz verwenden.
+Öffentliches Repository https://github.com/Erste-Hilfe-Hero/Dranbleib vorhanden, Source-Pushes verifiziert. Zusätzliche separate Workflows im privaten LifeKit-Repository vom Nutzer freigegeben. Erfolgreiche private Contabo-Installation und reale Servertests: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37733456055. Kein GitHub-/Contabo-Zugang mehr als pauschaler Blocker zu behandeln.
 
-## Aktueller GitHub-Status
-
-Das vom Nutzer angelegte öffentliche Repository https://github.com/Erste-Hilfe-Hero/Dranbleib enthält den verifizierten ersten Push bis 1efa222. Danach hat der Nutzer weitere GitHub-Speicherung gestoppt; keine weiteren Änderungen oder Löschungen dort. Deployment über die lesend gefundene LifeKit-Contabo-Anbindung noch nicht ausgeführt.
+Offen sind öffentliche HTTPS/OAuth-Produktionsarchitektur, echter ChatGPT-Test, verifiziertes Entwicklerkonto, reale rechtliche Angaben und Einreichung. Der private Dienst ersetzt diese Prüfungen nicht. Keine vorhandenen Spiel-Deployments verändert.

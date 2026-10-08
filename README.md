@@ -45,6 +45,7 @@ Die gleiche deutsche Oberfläche läuft eigenständig und über die aktuelle MCP
 ```bash
 npm run check
 npm test
+python -m unittest discover -s test -p '*_test.py'
 # Einmalig, falls kein System-Chromium vorhanden:
 npx playwright install chromium
 npm run test:ui
@@ -52,7 +53,7 @@ npm audit --omit=dev
 npm run package:review
 ```
 
-Optional `CHROMIUM_PATH=/pfad/zu/chromium npm run test:ui`. Stand 2026-10-07: neun Domain-/HTTP-/MCP-Tests bestanden, Browserablauf und simulierte MCP-Apps-Host-Bridge mit echten Tools/Resource bestanden. Die Tests verwenden temporäre Datenbanken und zwei getrennte Nutzer-/MCP-Sitzungen. Screenshots in `artifacts/`. Vollständiges Protokoll und fehlende ChatGPT-Prüfung: [VALIDATION.md](docs/VALIDATION.md).
+Optional `CHROMIUM_PATH=/pfad/zu/chromium npm run test:ui`. Stand 2026-10-08: zehn Domain-/HTTP-/MCP-Tests bestanden, Browserablauf und simulierte MCP-Apps-Host-Bridge mit echten Tools/Resource bestanden. Die Tests verwenden temporäre Datenbanken und zwei getrennte Nutzer-/MCP-Sitzungen. Screenshots in `artifacts/`. Vollständiges Protokoll und fehlende ChatGPT-Prüfung: [VALIDATION.md](docs/VALIDATION.md).
 
 ## ChatGPT verbinden und einreichen
 
@@ -64,14 +65,10 @@ Ein echter ChatGPT-/Entwicklermodus-Test wurde **nicht durchgeführt**: kein ver
 
 ## Git- und Veröffentlichungsstatus
 
-GitHub-Login Erste-Hilfe-Hero verifiziert. Der erste Erstellungsversuch wurde mangels Erstellungsrecht abgelehnt; anschließend hat der Nutzer das leere öffentliche Repository https://github.com/Erste-Hilfe-Hero/Dranbleib bereitgestellt. Der lokale Branch main wurde bis Commit `1efa222cfe6cc3b7dc1d9a007eab144abf5e881e` erfolgreich gepusht und der Remote-Stand per `git ls-remote` verifiziert. Laufzeitdaten und Secrets waren nicht enthalten.
+Quellcode und Dokumentation liegen auf https://github.com/Erste-Hilfe-Hero/Dranbleib (öffentlich). Pushes und Remote-Stand wurden verifiziert. Die ursprüngliche Integrationssperre für die Repository-Erstellung ist historisch: Der Nutzer hat das Repository selbst angelegt und die weiteren Workflows/Deployments danach freigegeben.
 
-**Aktuelle Anweisung vom 2026-10-08: nichts Weiteres auf GitHub speichern.** Seitdem keine weiteren Pushes oder GitHub-Dateiänderungen. Diese Statuskorrektur bleibt lokal. Keine Löschung bereits übertragener Inhalte angeordnet oder ausgeführt.
+**Die private Demo läuft auf dem vorhandenen Contabo-VPS**, als eigener Dienst `dranbleib` auf `127.0.0.1:8790`. Installierter Code: `b144fe3`. Der [erfolgreiche Runner-Lauf](https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37733456055) hat Erfassung, Liste/Filter, Änderung, Abschluss, Entwurf, Löschung und Datentrennung direkt dort geprüft. Vorher laufende Dienste bleiben aktiv. Kein neuer VPS bestellt.
 
-Im Repository lifekit-ki-site wurde lesend eine bestehende GitHub-Actions-Verbindung zu Contabo gefunden, auf Branch codex/detailed-world-art-20261007. Die vorhandene Veröffentlichung nutzt einen GitHub-hosted Ubuntu-Runner und vier CONTABO_* Secrets. Secretwerte wurden nicht ausgelesen oder kopiert. Die private SSH-Verbindung wird innerhalb des Jobs über einen vorhandenen Contabo-Secret aufgebaut. Kein neuer Workflow gespeichert oder gestartet. LifeKit-Spielcode und laufende Dienste unverändert.
+Mit eigenem autorisiertem SSH-Zugang `ssh -N -L 8787:127.0.0.1:8790 root@161.97.102.171` starten, dann http://127.0.0.1:8787 öffnen. Die lokale Startanleitung oben funktioniert weiterhin unabhängig davon. [Contabo-Betrieb und Nachweise](docs/CONTABO.md), [Runner/Installation](deployment/README.md).
 
-Dranbleib ist weiterhin nicht auf Contabo installiert oder öffentlich veröffentlicht. Die bestehenden LifeKit-Workflows veröffentlichen das Spiel und sind keine allgemeinen Dranbleib-Deployments. Für einen separaten Runnerauftrag wäre eine neue Workflow-Konfiguration erforderlich; sie wird unter der aktuellen Anweisung nicht auf GitHub angelegt. Produktions-OAuth und echter ChatGPT-Kontotest bleiben offen.
-
-Contabo ist als Hostinganbieter vom Nutzer erlaubt. Noch kein Serverzugang oder Zielhost verbunden; keine Bestellung oder Veröffentlichung. [Contabo-Vorbereitung und benötigte Angaben](docs/CONTABO.md).
-
-Privater VPS-Betrieb: [systemd-Vorlage und Installation](deployment/README.md). Diese wurde vorbereitet, aber nicht auf Contabo ausgeführt.
+Nicht öffentlich als ChatGPT-App veröffentlicht oder eingereicht. Für diese weitere Stufe fehlen produktive OAuth-Konfiguration und stabile Kontenpersistenz, eigene HTTPS-Adresse, ChatGPT-/verifiziertes Entwicklerkonto sowie echte Anbieter-, Datenschutz-, Nutzungsbedingungen- und Supportangaben. Private Demositzungen sind keine produktive Anmeldung. Keine Geheimnisse im Repository oder Vorbereitungspaket.

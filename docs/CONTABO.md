@@ -1,33 +1,29 @@
-# Contabo als vorgesehenes Hosting
+# Contabo-Status – 2026-10-08
 
-Der Nutzer hat Contabo als Anbieter erlaubt. Noch kein Deployment: Die Laufzeit meldet keine verbundenen Secrets, Identitäten oder Serverangaben. Server-IP/Hostname, SSH-Benutzer, sicher konfigurierter SSH-Zugang und gewünschte Domain fehlen. Ein neuer kostenpflichtiger VPS wurde nicht bestellt. Die Anbieterfreigabe benennt noch keinen Tarif und kein Budget.
+**Private Dranbleib-Demo erfolgreich installiert und getestet.** Installierter Anwendungscommit: `b144fe3ed348d14ea19c1becf0f3965794c20bf2`.
 
-## Nächster ausführbarer Schritt
+Die Nutzerfreigabe „Mach wie du denkst“ erlaubt den getrennten GitHub-Workflow und das Deployment. Frühere Sperre weiterer GitHub-Speicherungen ist für diese Arbeit aufgehoben. Keine neue Contabo-Instanz bestellt und keine bestehende Spielanwendung verändert.
 
-Nach Bereitstellung des Zugangs zuerst nur Bestandsaufnahme des ausdrücklich zugewiesenen VPS: Betriebssystem, Ressourcen, bestehende Dienste/Ports, Domains/TLS und verfügbare Zugriffsrechte. Bestehende Anwendungen nicht verändern. Dranbleib in einem separaten Verzeichnis und unter eigenem Dienstbenutzer installieren; keine pauschalen Firewall- oder Systemänderungen.
+## Nachweise
 
-Für einen privaten Demotest kann der jetzige Loopback-Server auf dem VPS laufen und über SSH-Portweiterleitung bedient werden. Das ist keine öffentlich erreichbare ChatGPT-App. Beispiel nach Bekanntgabe des tatsächlichen Zielservers: lokaler Port 8787 wird auf den Loopback-Port 8787 des zugewiesenen VPS weitergeleitet. Keine Zugangsdaten in Befehlsbeispiele oder Repository eintragen.
+- Read-only-Serverinventar: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37732812264 – erfolgreich. Linux x86_64, glibc 2.39, systemd vorhanden, eigener Port frei, keine frühere Dranbleib-Installation. Keine System-Node-Laufzeit vorhanden.
+- Erster Installationsversuch: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37733146979 – Dienststart/Health-Check fehlgeschlagen, neue Dranbleib-Einheit zurückgenommen. Ursache im Start über den Release-Symlink lokal korrigiert und mit echtem Prozess-/Health-Test abgesichert.
+- Erfolgreiche Installation: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37733456055 – zehn Node-Tests, sechs Python-Archive-Sicherheitstests und tatsächlicher Server-Smoke-Test bestanden. Health ok/local-demo, separate Cookieidentitäten isoliert, Testvorgang gelöscht. Vorher laufende Dienste weiterhin aktiv.
 
-Für eine öffentliche ChatGPT-Verbindung zuerst den Produktionspfad implementieren und prüfen: OAuth/PKCE und Discovery, verifizierte Token, stabile nutzerbezogene Persistenz, TLS-Domain und beschränkter Reverse Proxy. Die aktuelle Loopback-/Hostprüfung darf nicht einfach entfernt werden, um die anonyme Demositzung ins Internet zu stellen. Private Entwicklungsverbindung alternativ über autorisierten Secure MCP Tunnel; dafür fehlen weiterhin Tunnelidentität und Berechtigungen.
+## Betrieb
 
-## Noch benötigte Angaben
+Eigener unprivilegierter Benutzer und systemd-Dienst `dranbleib`, Listener **127.0.0.1:8790**, Daten unter /var/lib/dranbleib, Code unter /opt/dranbleib/current. Node.js 24.19.0 liegt ausschließlich im Dranbleib-Release; System-Node und LifeKit bleiben unverändert. Keine Firewall- oder öffentlichen Proxyänderungen.
 
-- Bereits vorhandener, für dieses Projekt freigegebener VPS: IP/Hostname und SSH-Benutzer.
-- SSH-Zugang über sichere Zugangskonfiguration; keine Schlüssel oder Passwörter im Chat, Quellcode oder ZIP.
-- Gewünschte Domain/Subdomain und autorisierter DNS-Zugang, falls HTTPS-Veröffentlichung gewünscht ist.
-- Bei Neubestellung zuerst konkrete Tarif-/Budgetfreigabe; bislang keine Bestellung autorisiert oder ausgelöst.
-- OAuth-Anbieter bzw. verbundene Identitätskonfiguration vor dauerhafter öffentlicher Nutzerdatenspeicherung.
+Zugriff mit eigenem autorisiertem SSH-Zugang:
 
-GitHub-Connector ist inzwischen für Erste-Hilfe-Hero verifiziert. Neues Ziel Erste-Hilfe-Hero/dranbleib vom Nutzer autorisiert, aber Erstellung durch die GitHub-Integration abgelehnt (createRepository). Contabo-Zugang und verifiziertes OpenAI-Entwicklerkonto sind weiterhin nicht vorhanden.
+```bash
+ssh -N -L 8787:127.0.0.1:8790 root@161.97.102.171
+```
 
-## Vorbereitet am 2026-10-08
+Danach http://127.0.0.1:8787 öffnen. Auf dem VPS ist MCP unter http://127.0.0.1:8790/mcp verfügbar. Kein SSH-Schlüssel oder Passwort wurde ins öffentliche Dranbleib-Repository kopiert. Zugang wird innerhalb des Runners aus der bereits vorhandenen LifeKit-Contabo-Konfiguration genutzt. Die LifeKit-Workflows zur Spielveröffentlichung wurden nicht gestartet.
 
-Privater systemd-Betrieb ist unter deployment/ dokumentiert: eigener Dienstbenutzer, private Datenhaltung, Loopback-Listener und SSH-Portweiterleitung. Die Servicevorlage wurde nicht auf einem Zielserver installiert. Zielserver und Zugänge fehlen weiterhin.
+Weiteres zu Releases, Rollback und Bedienung: [deployment/README.md](../deployment/README.md).
 
-## Aktueller Stand nach Infrastrukturprüfung
+## Verbleibende externe Schritte
 
-Der Nutzer verweist auf LifeKit und den Runner. Lesend verifiziert: bestehende Contabo-Anbindung über CONTABO_CLIENT_ID, CONTABO_CLIENT_SECRET, CONTABO_API_USER und CONTABO_API_PASSWORD im Actions-Workflow auf Branch codex/detailed-world-art-20261007. Letzter geprüfter erfolgreicher Lauf 37723763387 nutzte ubuntu-latest (GitHub-hosted). Runner-Verwaltungsabfrage wurde mit 403 abgelehnt; daraus folgt nicht, dass Runner fehlen. Keine Secretwerte angefordert oder ausgegeben.
-
-Der bestehende Workflow veröffentlicht LifeKit/Nyrathen und darf nicht als Dranbleib-Deployment gestartet werden. Ein neuer separater Auftrag müsste als Workflow bereitgestellt werden. Der Nutzer hat weitere GitHub-Speicherung gestoppt; kein solcher Workflow wurde angelegt oder ausgeführt. Erstes Dranbleib-Push vor der Stoppanweisung war bereits erfolgreich; danach keine weiteren GitHub-Mutationen.
-
-Neue Nutzerfreigabe: „Mach wie du denkst“ erlaubt den separaten Workflow und das Dranbleib-Deployment. Der erste Schritt ist die isolierte Bestandsaufnahme; frühere Sperre weiterer GitHub-Speicherungen ist damit für diese Arbeit aufgehoben.
+Die private MVP-Demo ist umgesetzt. Eine öffentlich erreichbare ChatGPT-App ist noch nicht veröffentlicht: produktive OAuth-Identität/stabile Nutzerdatenhaltung, eigene HTTPS-Domain, verifiziertes OpenAI-Entwicklerkonto, echte ChatGPT-Kontotests und juristische Anbieter-/Datenschutz-/Supportangaben sind nicht verfügbar. Kein Portal-Upload, keine Einreichung, keine Veröffentlichung. Der gegenwärtige Dienst darf nicht als produktive Mehrnutzerplattform dargestellt werden.
