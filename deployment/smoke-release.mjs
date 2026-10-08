@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {randomBytes,createHash} from 'node:crypto';
 import {Client} from '@modelcontextprotocol/sdk/client/index.js';
 import {StreamableHTTPClientTransport} from '@modelcontextprotocol/sdk/client/streamableHttp.js';
@@ -6,16 +7,16 @@ const base=process.env.SMOKE_BASE??'http://127.0.0.1:8791';
 const metadata=await (await fetch(base+'/.well-known/oauth-protected-resource/mcp')).json();
 const resource=metadata.resource,origin=new URL(resource).origin;
 const verifier=randomBytes(48).toString('base64url'),challenge=createHash('sha256').update(verifier).digest('base64url');
-const password=randomBytes(24).toString('hex'),redirect='https://chatgpt.com/connector/oauth/dranbleib-synthetic-test';
-const accounts=[],connections=[];
+const defaultPassword=randomBytes(24).toString('hex'),redirect='https://chatgpt.com/connector/oauth/dranbleib-synthetic-test';
+const accounts=[],connections=[];const seeds=process.env.SMOKE_CREDENTIALS?JSON.parse(readFileSync(process.env.SMOKE_CREDENTIALS,'utf8')).accounts:[];
 async function post(path,body,headers={}){return fetch(base+path,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded',Origin:origin,...headers},body:new URLSearchParams(body),redirect:'manual'});}
 async function account(){
- const name='smoke-'+randomBytes(6).toString('hex');
+ const seed=seeds[accounts.length],name=seed?.name??'smoke-'+randomBytes(6).toString('hex'),password=seed?.password??defaultPassword;
  const reg=await fetch(base+'/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({redirect_uris:[redirect],token_endpoint_auth_method:'none',client_name:'Dranbleib synthetic deployment verification'})});assert.equal(reg.status,201);const client=await reg.json();
  const q=new URLSearchParams({client_id:client.client_id,redirect_uri:redirect,response_type:'code',code_challenge:challenge,code_challenge_method:'S256',resource,scope:'loops:read loops:write',state:'synthetic-verification'});
  const a=await fetch(base+'/authorize?'+q,{redirect:'manual'});assert.equal(a.status,302);const url=new URL(a.headers.get('location'));
  const f=await fetch(base+url.pathname+url.search);const html=await f.text(),csrf=html.match(/name="csrf" value="([a-f0-9]+)"/)[1],cookie=f.headers.get('set-cookie').split(';')[0];
- const consent=await post('/consent',{request:url.searchParams.get('request'),csrf,name,password,create:'yes',approved:'yes'},{Cookie:cookie});assert.equal(consent.status,302);accounts.push(name);
+ const consent=await post('/consent',{request:url.searchParams.get('request'),csrf,name,password,create:seed?'no':'yes',approved:'yes'},{Cookie:cookie});assert.equal(consent.status,302);accounts.push({name,password});
  const callback=new URL(consent.headers.get('location'));assert.equal(callback.searchParams.get('state'),'synthetic-verification');
  const token=await post('/token',{grant_type:'authorization_code',client_id:client.client_id,code:callback.searchParams.get('code'),code_verifier:verifier,redirect_uri:redirect,resource});assert.equal(token.status,200);const tokens=await token.json();
  const c=new Client({name:'deployment-smoke',version:'1.0'}),t=new StreamableHTTPClientTransport(new URL(base+'/mcp'),{requestInit:{headers:{Authorization:'Bearer '+tokens.access_token}}});await c.connect(t);connections.push({c,t});return c;
@@ -34,8 +35,8 @@ try{
  assert.equal((await call(a,'list_open_loops',{filter:'erledigt'})).structuredContent.loops.length,1);
  assert.equal((await call(a,'delete_open_loop',{id:loop.id,confirmed:true})).isError,undefined);
  assert.equal((await call(a,'list_open_loops')).structuredContent.loops.length,0);
- console.log(JSON.stringify({status:'passed',mode:'authenticated-release-candidate',oauth_pkce_consent:true,authenticated_crud:true,account_isolation:true,uncertain_date:true,no_anonymous_access:true,publicly_exposed:false}));
+ console.log(JSON.stringify({status:'passed',mode:'authenticated-release-candidate',oauth_pkce_consent:true,authenticated_crud:true,account_isolation:true,uncertain_date:true,no_anonymous_access:true,publicly_exposed:base.startsWith('https:')}));
 }finally{
  for(const {c,t} of connections){try{await t.terminateSession();}catch{}await c.close();}
- for(const name of accounts){const f=await fetch(base+'/account/delete'),html=await f.text(),csrf=html.match(/name="csrf" value="([a-f0-9]+)"/)[1],cookie=f.headers.get('set-cookie').split(';')[0];const r=await post('/account/delete',{csrf,name,password,confirmed:'yes'},{Cookie:cookie});assert.equal(r.status,200);}
+ for(const {name,password} of accounts){const f=await fetch(base+'/account/delete'),html=await f.text(),csrf=html.match(/name="csrf" value="([a-f0-9]+)"/)[1],cookie=f.headers.get('set-cookie').split(';')[0];const r=await post('/account/delete',{csrf,name,password,confirmed:'yes'},{Cookie:cookie});assert.equal(r.status,200);}
 }

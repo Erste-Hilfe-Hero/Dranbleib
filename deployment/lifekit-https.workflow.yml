@@ -1,0 +1,115 @@
+# The installed workflow pins REVIEWED_COMMIT below to the exact qualified source.
+name: Dranbleib closed HTTPS preview deployment
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: dranbleib-contabo
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Erste-Hilfe-Hero/lifekit-ki-site
+          ref: 5a1f0cdd60e06b4f41ad5545030bcaaa0ed8c147
+          path: access-source
+          sparse-checkout: tools/deploy/contabo-web-access.mjs
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: Erste-Hilfe-Hero/Dranbleib
+          ref: REVIEWED_COMMIT
+          path: project
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.19.0
+      - name: Qualify immutable source before obtaining server access
+        working-directory: project
+        run: |
+          npm ci
+          npm run check
+          npm test
+          CHROMIUM_PATH=/usr/bin/google-chrome npm run test:ui
+          CHROMIUM_PATH=/usr/bin/google-chrome npm run test:oauth-ui
+          npm audit --omit=dev --audit-level=moderate
+          python -m unittest discover -s test -p '*_test.py'
+      - name: Build an explicit production-only release with private Node runtime
+        working-directory: project
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --omit=dev
+          mkdir runtime
+          cp "$(command -v node)" runtime/node
+          python - <<'PY'
+          import tarfile
+          with tarfile.open('../dranbleib-release.tar.gz', 'w:gz', dereference=True) as archive:
+              for path in ['src', 'public', 'node_modules', 'runtime', 'scripts', 'package.json', 'package-lock.json']:
+                  archive.add(path)
+          PY
+      - name: Obtain the existing Contabo SSH access inside the runner only
+        env:
+          CONTABO_CLIENT_ID: ${{ secrets.CONTABO_CLIENT_ID }}
+          CONTABO_CLIENT_SECRET: ${{ secrets.CONTABO_CLIENT_SECRET }}
+          CONTABO_API_USER: ${{ secrets.CONTABO_API_USER }}
+          CONTABO_API_PASSWORD: ${{ secrets.CONTABO_API_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p /tmp/nyr-web "$HOME/.ssh"
+          node access-source/tools/deploy/contabo-web-access.mjs
+          VPS_HOST=$(cat /tmp/nyr-web/ip)
+          ssh-keyscan -H "$VPS_HOST" > "$RUNNER_TEMP/dranbleib-known-hosts" 2>/dev/null
+      - name: Install the separate authenticated candidate and verify real OAuth CRUD
+        shell: bash
+        run: |
+          set -euo pipefail
+          VPS_HOST=$(cat /tmp/nyr-web/ip)
+          SOURCE_COMMIT=$(git -C project rev-parse HEAD)
+          ARCHIVE_SHA=$(sha256sum dranbleib-release.tar.gz | cut -d' ' -f1)
+          REMOTE_DIR="/tmp/dranbleib-$GITHUB_RUN_ID"
+          SSH_OPTIONS=(-i /tmp/nyr-web/key -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/dranbleib-known-hosts" -o ConnectTimeout=20 -o ServerAliveInterval=15)
+          ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "mkdir -m 700 '$REMOTE_DIR'"
+          scp "${SSH_OPTIONS[@]}" dranbleib-release.tar.gz project/deployment/install-private.py project/deployment/smoke-release.mjs project/deployment/install-https.py project/deployment/sync-certificate.py "root@$VPS_HOST:$REMOTE_DIR/"
+          ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "python3 '$REMOTE_DIR/install-private.py' --archive '$REMOTE_DIR/dranbleib-release.tar.gz' --sha256 '$ARCHIVE_SHA' --commit '$SOURCE_COMMIT' --mode preview --public-origin https://161.97.102.171:8443" > "$RUNNER_TEMP/dranbleib-install.json"
+          ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "python3 '$REMOTE_DIR/install-https.py'" > "$RUNNER_TEMP/dranbleib-https.json"
+          ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" "/opt/dranbleib-preview/current/runtime/node /opt/dranbleib-preview/current/scripts/account-admin.js --data /var/lib/dranbleib-preview/dranbleib.sqlite --origin https://161.97.102.171:8443 --count 2 --credentials-out '$REMOTE_DIR/smoke-credentials.json'"
+          scp "${SSH_OPTIONS[@]}" "root@$VPS_HOST:$REMOTE_DIR/smoke-credentials.json" "$RUNNER_TEMP/dranbleib-smoke-credentials.json"
+          chmod 600 "$RUNNER_TEMP/dranbleib-smoke-credentials.json"
+          SMOKE_BASE=https://161.97.102.171:8443 SMOKE_CREDENTIALS="$RUNNER_TEMP/dranbleib-smoke-credentials.json" node project/deployment/smoke-release.mjs > "$RUNNER_TEMP/dranbleib-smoke.json"
+          ssh "${SSH_OPTIONS[@]}" "root@$VPS_HOST" 'test -f /var/lib/dranbleib-ops/reviewer.json || /opt/dranbleib-preview/current/runtime/node /opt/dranbleib-preview/current/scripts/account-admin.js --data /var/lib/dranbleib-preview/dranbleib.sqlite --origin https://161.97.102.171:8443 --seed-demo --credentials-out /var/lib/dranbleib-ops/reviewer.json'
+          python -m json.tool "$RUNNER_TEMP/dranbleib-https.json"
+          python -m json.tool "$RUNNER_TEMP/dranbleib-install.json"
+          python -m json.tool "$RUNNER_TEMP/dranbleib-smoke.json"
+      - name: Preserve deployment evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dranbleib-https-preview-evidence
+          path: |
+            ${{ runner.temp }}/dranbleib-install.json
+            ${{ runner.temp }}/dranbleib-smoke.json
+            ${{ runner.temp }}/dranbleib-https.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Clean up only generated synthetic accounts and their credential files
+        if: always()
+        shell: bash
+        run: |
+          if test -f /tmp/nyr-web/key; then
+            VPS_HOST=$(cat /tmp/nyr-web/ip)
+            REMOTE_DIR="/tmp/dranbleib-$GITHUB_RUN_ID"
+            ssh -i /tmp/nyr-web/key -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/dranbleib-known-hosts" "root@$VPS_HOST" "if test -f '$REMOTE_DIR/smoke-credentials.json'; then /opt/dranbleib-preview/current/runtime/node /opt/dranbleib-preview/current/scripts/account-admin.js --data /var/lib/dranbleib-preview/dranbleib.sqlite --origin https://161.97.102.171:8443 --cleanup-test-credentials '$REMOTE_DIR/smoke-credentials.json'; fi"
+          fi
+          python -c "from pathlib import Path; Path('$RUNNER_TEMP/dranbleib-smoke-credentials.json').unlink(missing_ok=True)"
+      - name: Delete temporary runner access material
+        if: always()
+        shell: bash
+        run: python -c "from pathlib import Path; Path('/tmp/nyr-web/key').unlink(missing_ok=True)"

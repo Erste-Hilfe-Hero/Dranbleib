@@ -38,7 +38,7 @@ def assert_archive_safe(archive):
         path = Path(member.name)
         if path.is_absolute() or '..' in path.parts or member.issym() or member.islnk() or not (member.isfile() or member.isdir()):
             raise RuntimeError('Archive has unsafe entries.')
-        if path.parts and path.parts[0] not in {'src', 'public', 'node_modules', 'runtime', 'package.json', 'package-lock.json'}:
+        if path.parts and path.parts[0] not in {'src', 'public', 'node_modules', 'runtime', 'package.json', 'package-lock.json', 'scripts'}:
             raise RuntimeError('Unexpected archive content.')
 
 
@@ -48,10 +48,10 @@ def main():
     parser.add_argument('--archive', required=True)
     parser.add_argument('--sha256', required=True)
     parser.add_argument('--commit', required=True)
-    parser.add_argument('--mode', choices=['private','authenticated'], default='private')
+    parser.add_argument('--mode', choices=['private','authenticated','preview'], default='private')
     parser.add_argument('--public-origin')
     args = parser.parse_args()
-    if args.mode == 'authenticated':
+    if args.mode in ['authenticated','preview']:
         from urllib.parse import urlsplit
         u = urlsplit(args.public_origin or '')
         if u.scheme != 'https' or not u.netloc or u.path not in ['', '/'] or u.query or u.fragment or u.username or u.password or not re.fullmatch(r'https://[a-zA-Z0-9.:-]+/?', args.public_origin):
@@ -64,7 +64,14 @@ def main():
         ENTRY = 'release-server.js'
         DATA_DIR = '/var/lib/' + SERVICE
         ORIGIN = args.public_origin.rstrip('/')
-        HEALTH_MODE = 'authenticated-release-candidate' 
+        HEALTH_MODE = 'authenticated-release-candidate'
+        if args.mode == 'preview':
+            SERVICE = 'dranbleib-preview'
+            BASE = Path('/opt/' + SERVICE)
+            UNIT = Path('/etc/systemd/system/' + SERVICE + '.service')
+            DATA_DIR = '/var/lib/' + SERVICE
+            PORT = 8792
+            DESCRIPTION = 'Dranbleib closed HTTPS preview' 
     if os.geteuid() != 0 or platform.system() != 'Linux' or platform.machine() != 'x86_64':
         raise RuntimeError('Expected root on an inspected Linux x86_64 host.')
     if not re.fullmatch(r'[a-f0-9]{40}', args.commit) or not re.fullmatch(r'[a-f0-9]{64}', args.sha256):
@@ -137,6 +144,8 @@ WantedBy=multi-user.target
     unit = unit.replace('Dranbleib private local MCP demo', DESCRIPTION).replace('/opt/dranbleib', str(BASE)).replace('/var/lib/dranbleib', DATA_DIR).replace('User=dranbleib', 'User=' + SERVICE).replace('Group=dranbleib', 'Group=' + SERVICE).replace('StateDirectory=dranbleib', 'StateDirectory=' + SERVICE).replace('PORT=8790', 'PORT=' + str(PORT)).replace('/src/server.js', '/src/' + ENTRY)
     if ORIGIN:
         unit = unit.replace('Environment=PORT=', 'Environment=PUBLIC_ORIGIN=' + ORIGIN + '\nEnvironment=PORT=')
+    if args.mode == 'preview':
+        unit = unit.replace('Environment=PUBLIC_ORIGIN=', 'EnvironmentFile=-/etc/dranbleib-preview.env\nEnvironment=PUBLIC_ORIGIN=')
     try:
         link = BASE / 'next'
         if link.is_symlink():

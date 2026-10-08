@@ -6,7 +6,7 @@ import {existsSync,mkdirSync} from 'node:fs';
 import {randomBytes,createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {startReleaseServer} from '../src/release-server.js';
-const origin='https://release.example',app=startReleaseServer({publicOrigin:origin,port:0,dataPath:':memory:'});await once(app.http,'listening');const base='http://127.0.0.1:'+app.http.address().port;
+const origin='https://release.example',app=startReleaseServer({publicOrigin:origin,allowSignup:true,port:0,dataPath:':memory:'});await once(app.http,'listening');const base='http://127.0.0.1:'+app.http.address().port;
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:existsSync('/usr/bin/chromium')?{executablePath:'/usr/bin/chromium'}:{})});
 try{
  let callback;

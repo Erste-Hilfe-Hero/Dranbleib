@@ -13,7 +13,7 @@ const origin='https://release.example';
 const verifier='v'.repeat(64),challenge=createHash('sha256').update(verifier).digest('base64url');
 const redirect='https://chatgpt.com/connector/oauth/test-only';
 const resource=origin+'/mcp';
-async function setup(path=':memory:'){const app=startReleaseServer({publicOrigin:origin,port:0,dataPath:path});await once(app.http,'listening');return {app,base:'http://127.0.0.1:'+app.http.address().port};}
+async function setup(path=':memory:'){const app=startReleaseServer({publicOrigin:origin,allowSignup:true,port:0,dataPath:path});await once(app.http,'listening');return {app,base:'http://127.0.0.1:'+app.http.address().port};}
 async function register(base){const r=await fetch(base+'/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({redirect_uris:[redirect],token_endpoint_auth_method:'none',grant_types:['authorization_code','refresh_token'],response_types:['code'],client_name:'Synthetischer OAuth-Test'})});assert.equal(r.status,201);return r.json();}
 async function authorization(base,client,name,scopes='loops:read loops:write'){
  const q=new URLSearchParams({client_id:client.client_id,redirect_uri:redirect,response_type:'code',code_challenge:challenge,code_challenge_method:'S256',resource,scope:scopes,state:'preserved-state'});
