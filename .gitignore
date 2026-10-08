@@ -5,3 +5,6 @@ data/
 !.env.example
 artifacts/
 *.sqlite*
+
+__pycache__/
+*.pyc

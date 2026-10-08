@@ -23,3 +23,11 @@ GitHub-Connector ist inzwischen für Erste-Hilfe-Hero verifiziert. Neues Ziel Er
 ## Vorbereitet am 2026-10-08
 
 Privater systemd-Betrieb ist unter deployment/ dokumentiert: eigener Dienstbenutzer, private Datenhaltung, Loopback-Listener und SSH-Portweiterleitung. Die Servicevorlage wurde nicht auf einem Zielserver installiert. Zielserver und Zugänge fehlen weiterhin.
+
+## Aktueller Stand nach Infrastrukturprüfung
+
+Der Nutzer verweist auf LifeKit und den Runner. Lesend verifiziert: bestehende Contabo-Anbindung über CONTABO_CLIENT_ID, CONTABO_CLIENT_SECRET, CONTABO_API_USER und CONTABO_API_PASSWORD im Actions-Workflow auf Branch codex/detailed-world-art-20261007. Letzter geprüfter erfolgreicher Lauf 37723763387 nutzte ubuntu-latest (GitHub-hosted). Runner-Verwaltungsabfrage wurde mit 403 abgelehnt; daraus folgt nicht, dass Runner fehlen. Keine Secretwerte angefordert oder ausgegeben.
+
+Der bestehende Workflow veröffentlicht LifeKit/Nyrathen und darf nicht als Dranbleib-Deployment gestartet werden. Ein neuer separater Auftrag müsste als Workflow bereitgestellt werden. Der Nutzer hat weitere GitHub-Speicherung gestoppt; kein solcher Workflow wurde angelegt oder ausgeführt. Erstes Dranbleib-Push vor der Stoppanweisung war bereits erfolgreich; danach keine weiteren GitHub-Mutationen.
+
+Neue Nutzerfreigabe: „Mach wie du denkst“ erlaubt den separaten Workflow und das Dranbleib-Deployment. Der erste Schritt ist die isolierte Bestandsaufnahme; frühere Sperre weiterer GitHub-Speicherungen ist damit für diese Arbeit aufgehoben.

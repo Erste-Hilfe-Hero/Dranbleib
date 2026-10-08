@@ -64,9 +64,13 @@ Ein echter ChatGPT-/Entwicklermodus-Test wurde **nicht durchgeführt**: kein ver
 
 ## Git- und Veröffentlichungsstatus
 
-Neues lokales Repository, Branch `main`, Checkpoint-Commits vorhanden. GitHub-Login **Erste-Hilfe-Hero** am 2026-10-08 über Connector und CLI verifiziert. Der Nutzer hat die Erstellung eines neuen Repositories autorisiert. Die Erstellung von **Erste-Hilfe-Hero/dranbleib** als privates Repository wurde tatsächlich versucht; GitHub antwortete `Resource not accessible by integration (createRepository)`. Die verbundene Integration darf bestehende freigegebene Repositories beschreiben, aber diesen Erstellungsaufruf nicht ausführen. **Kein Repository erstellt und nichts gepusht.** Nach Anlage des privaten Zielrepositories und Freigabe für die Integration kann der lokale Stand übertragen werden.
+GitHub-Login Erste-Hilfe-Hero verifiziert. Der erste Erstellungsversuch wurde mangels Erstellungsrecht abgelehnt; anschließend hat der Nutzer das leere öffentliche Repository https://github.com/Erste-Hilfe-Hero/Dranbleib bereitgestellt. Der lokale Branch main wurde bis Commit `1efa222cfe6cc3b7dc1d9a007eab144abf5e881e` erfolgreich gepusht und der Remote-Stand per `git ls-remote` verifiziert. Laufzeitdaten und Secrets waren nicht enthalten.
 
-Keine Contabo-Installation, kein öffentliches Hosting, keine Einreichung und keine Veröffentlichung. VPS-IP/Hostname, SSH-Benutzer und sicher verbundener SSH-Zugang fehlen. OpenAI-Entwicklerverifizierung, Produktions-OAuth, rechtliche Angaben und ChatGPT-Testkonto stehen ebenfalls aus.
+**Aktuelle Anweisung vom 2026-10-08: nichts Weiteres auf GitHub speichern.** Seitdem keine weiteren Pushes oder GitHub-Dateiänderungen. Diese Statuskorrektur bleibt lokal. Keine Löschung bereits übertragener Inhalte angeordnet oder ausgeführt.
+
+Im Repository lifekit-ki-site wurde lesend eine bestehende GitHub-Actions-Verbindung zu Contabo gefunden, auf Branch codex/detailed-world-art-20261007. Die vorhandene Veröffentlichung nutzt einen GitHub-hosted Ubuntu-Runner und vier CONTABO_* Secrets. Secretwerte wurden nicht ausgelesen oder kopiert. Die private SSH-Verbindung wird innerhalb des Jobs über einen vorhandenen Contabo-Secret aufgebaut. Kein neuer Workflow gespeichert oder gestartet. LifeKit-Spielcode und laufende Dienste unverändert.
+
+Dranbleib ist weiterhin nicht auf Contabo installiert oder öffentlich veröffentlicht. Die bestehenden LifeKit-Workflows veröffentlichen das Spiel und sind keine allgemeinen Dranbleib-Deployments. Für einen separaten Runnerauftrag wäre eine neue Workflow-Konfiguration erforderlich; sie wird unter der aktuellen Anweisung nicht auf GitHub angelegt. Produktions-OAuth und echter ChatGPT-Kontotest bleiben offen.
 
 Contabo ist als Hostinganbieter vom Nutzer erlaubt. Noch kein Serverzugang oder Zielhost verbunden; keine Bestellung oder Veröffentlichung. [Contabo-Vorbereitung und benötigte Angaben](docs/CONTABO.md).
 

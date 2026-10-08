@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+"""Read-only server inventory for a separate Dranbleib deployment. No secret reads."""
+import json
+import os
+import platform
+import shutil
+import socket
+import subprocess
+
+
+def command(args):
+    try:
+        p = subprocess.run(args, capture_output=True, text=True, timeout=15)
+        return p.returncode, p.stdout.strip()
+    except (OSError, subprocess.TimeoutExpired):
+        return None, ''
+
+
+def probe_port(port):
+    with socket.socket() as sock:
+        return sock.connect_ex(('127.0.0.1', port)) == 0
+
+
+_, node_version = command(['node', '--version'])
+_, service_status = command(['systemctl', 'is-active', 'dranbleib'])
+_, disk = command(['df', '-Pk', '/opt'])
+report = {
+    'mode': 'read-only-preflight',
+    'platform': platform.system(),
+    'architecture': platform.machine(),
+    'libc': list(platform.libc_ver()),
+    'system_node': node_version or 'not-found',
+    'systemd_available': bool(shutil.which('systemctl')),
+    'private_port_8790_in_use': probe_port(8790),
+    'dranbleib_service_status': service_status or 'unknown',
+    'project_path_exists': os.path.exists('/opt/dranbleib'),
+    'data_path_exists': os.path.exists('/var/lib/dranbleib'),
+    'opt_disk_usage': disk,
+    'existing_app_changes': False,
+}
+print(json.dumps(report, indent=2))

@@ -20,3 +20,11 @@ Der systemd-Dienst ist auf Start/Stop/Neustart ausgelegt. Zum Stoppen `systemctl
 ## Öffentliche ChatGPT-App
 
 Diese Vorlage allein stellt keine öffentliche ChatGPT-App bereit. Vor einem öffentlichen Reverse Proxy sind OAuth/Discovery/Tokenprüfung, stabile Nutzerpersistenz, Domain/TLS und reale Plattformtests nötig. Host-/Originprüfung nicht einfach entfernen. Öffentliches Hosting und Einreichung bleiben blockiert; siehe ../submission/CHECKLIST.md und ../docs/CONTABO.md.
+
+## Bestehender LifeKit-Runner
+
+`lifekit-preflight.workflow.yml` ist eine **nur lokal gespeicherte Vorlage** für einen getrennten manuellen Actions-Auftrag im LifeKit-Repository. Sie verwendet dessen bestehende CONTABO-Secrets und denselben GitHub-hosted Ubuntu-Runner wie der verifizierte erfolgreiche Lauf. Die Zugriffshilfe bleibt im privaten LifeKit-Repository; keine Secretwerte oder SSH-Schlüssel werden in das öffentliche Dranbleib-Repository kopiert.
+
+Die erste Stufe führt `contabo-preflight.py` über SSH-stdin aus: Linux-/Architektur-/Node-/systemd-Prüfung, freier separater Port 8790 und Dranbleib-Pfade. Keine Installation, kein Neustart, kein Zugriff auf Anwendungsdaten. Vor tatsächlicher Nutzung muss die Quelle auf den dann überprüften Dranbleib-Commit gepinnt werden. Der bisherige SSH-Trust-Bootstrap des vorhandenen Workflows verwendet ssh-keyscan; dies ist keine unabhängige Hostschlüsselverifikation. Für einen produktiven Deploymentauftrag vorher den Hostschlüssel über einen vertrauenswürdigen Kanal prüfen.
+
+Der Nutzer hatte GitHub-Speicherungen gestoppt. Deshalb wurde diese Vorlage nicht auf GitHub gespeichert oder ausgeführt. Eine erneute konkrete Freigabe für Workflow-Speicherung und Deployment wurde angefragt. Erst nach positiver Antwort kann diese Stufe auf dem tatsächlichen Host ausgeführt und ein passender isolierter Installationsauftrag erstellt werden. Die vorhandenen Spieleworkflows werden nicht ausgelöst.

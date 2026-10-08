@@ -39,3 +39,7 @@ Stand: 2026-10-07. Keine Veröffentlichung, kein autorisiertes Entwicklerkonto u
 ## GitHub
 
 Login Erste-Hilfe-Hero und Schreibrechte auf sechs bestehende Repositories am 2026-10-08 verifiziert. Nutzer hat ein neues privates Repository autorisiert. `gh repo create Erste-Hilfe-Hero/dranbleib --private` scheiterte tatsächlich mit `Resource not accessible by integration (createRepository)`. Kein Repository erstellt, kein Remote und kein Push. Zielrepository mit einem zur Erstellung berechtigten Zugang anlegen und der Integration freigeben; dann übertragen. Bestehende fremde Anwendungen nicht als Ersatz verwenden.
+
+## Aktueller GitHub-Status
+
+Das vom Nutzer angelegte öffentliche Repository https://github.com/Erste-Hilfe-Hero/Dranbleib enthält den verifizierten ersten Push bis 1efa222. Danach hat der Nutzer weitere GitHub-Speicherung gestoppt; keine weiteren Änderungen oder Löschungen dort. Deployment über die lesend gefundene LifeKit-Contabo-Anbindung noch nicht ausgeführt.
