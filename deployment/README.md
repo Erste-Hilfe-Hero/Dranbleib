@@ -1,3 +1,5 @@
+> Aktueller Stand: geschlossene öffentliche HTTPS-Testversion auf Port 8443 mit eigener Anmeldung und Datenbank. Details und aktuelle Nachweise: [HTTPS-PREVIEW.md](../docs/HTTPS-PREVIEW.md). Die folgenden Abschnitte dokumentieren auch historische private Stufen.
+
 # Separater Dranbleib-Dienst auf dem vorhandenen Contabo-VPS
 
 Dranbleib verwendet den bereits vorhandenen Contabo-Zugang aus dem privaten LifeKit-Repository. Es wird kein neuer VPS bestellt. GitHub-Actions nutzt denselben GitHub-hosted Ubuntu-Runner wie die verifizierte LifeKit-Veröffentlichung. Die Nutzerfreigabe erlaubt den eigenen Dranbleib-Workflow; LifeKit-Spielcode und bestehende Spiel-Deployments bleiben unverändert.

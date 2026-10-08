@@ -74,6 +74,6 @@ npm run package:submission -- /absoluter/pfad/provider.json
 
 ## Freigabestand
 
-Quellcode und Git-Checkpoints sind auf https://github.com/Erste-Hilfe-Hero/Dranbleib gepusht; separate Runner-Workflows installiert. GitHub-Vorabversionen sind technische Kandidaten, keine OpenAI-Veröffentlichung.
+Quellcode und Git-Checkpoints sind auf https://github.com/Erste-Hilfe-Hero/Dranbleib gepusht; separate Runner-Workflows installiert. [Vorabversion 0.2.0-rc.2 mit Paket und Prüfsumme](https://github.com/Erste-Hilfe-Hero/Dranbleib/releases/tag/v0.2.0-rc.2) veröffentlicht und verifiziert. GitHub-Vorabversionen sind technische Kandidaten, keine OpenAI-Veröffentlichung.
 
 Für die finale ChatGPT-Einreichung fehlen **tatsächlicher Anbietername/Anschrift/Kontakt, vervollständigte Rechtstexte und autorisierter Zugriff auf das verifizierte OpenAI-Entwicklerkonto**. Domain-Challenge und echte Hosttests müssen im Konto erfolgen. `/privacy` und `/terms` zeigen den unfertigen Stand wahrheitsgemäß und ersetzen keine finalen Rechtstexte. Keine Angaben oder Portalzustimmungen erfunden. [Checkliste](submission/CHECKLIST.md), [Rechtstextentwürfe](submission/LEGAL-DRAFTS.md), [Status](submission/CANDIDATE-STATUS.json).

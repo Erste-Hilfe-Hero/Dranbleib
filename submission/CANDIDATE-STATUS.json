@@ -2,7 +2,7 @@
   "kind": "verified-closed-https-preview",
   "version": "0.2.0-rc.2",
   "date_utc": "2026-10-08",
-  "installed_source_commit": "b5fba1c",
+  "installed_source_commit": "b5fba1cd6e0f29a3bc936068fa5af4b9045342cc",
   "runner_url": "https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37813599586",
   "service": "dranbleib-preview",
   "listen": "127.0.0.1:8792",
@@ -29,5 +29,8 @@
   "public_signup_available": false,
   "reviewer_account_prepared": true,
   "reviewer_credentials_in_package": false,
-  "review_media_prepared": true
+  "review_media_prepared": true,
+  "github_prerelease_url": "https://github.com/Erste-Hilfe-Hero/Dranbleib/releases/tag/v0.2.0-rc.2",
+  "public_media_audit_url": "https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37814175441",
+  "github_release_runner_url": "https://github.com/Erste-Hilfe-Hero/Dranbleib/actions/runs/37814184718"
 }

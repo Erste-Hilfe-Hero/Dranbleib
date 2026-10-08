@@ -1,3 +1,5 @@
+> Aktueller Stand: geschlossene öffentliche HTTPS-Testversion auf Port 8443 mit eigener Anmeldung und Datenbank. Details und aktuelle Nachweise: [HTTPS-PREVIEW.md](HTTPS-PREVIEW.md). Die folgenden Abschnitte dokumentieren auch historische private Stufen.
+
 # Contabo-Status – 2026-10-08
 
 **Private Dranbleib-Demo erfolgreich installiert und getestet.** Installierter Anwendungscommit: `b144fe3ed348d14ea19c1becf0f3965794c20bf2`.
