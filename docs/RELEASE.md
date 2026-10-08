@@ -33,3 +33,7 @@ Noch notwendig und nicht durch erfundene Angaben ersetzbar:
 - Reviewmaterialien und finale Plattformprüfung; Einreichung und Veröffentlichung sind getrennte ausstehende Schritte.
 
 Der Nutzer hat technische Einrichtung und GitHub-/Runner-/Contabo-Arbeiten autorisiert. Diese Autorisierung liefert weder eine unbekannte rechtliche Identität noch Zugriff auf ein nicht verbundenes OpenAI-Konto.
+
+## Abschließender Kandidatennachweis
+
+Korrigierte Version `55104624ce00511414aec6e93afa69c0e9e57cfe` am 2026-10-08 über den vorhandenen Runner installiert: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37737261844. 15 Node-Tests, sechs Archivtests, beide Browserprüfungen und Audit bestanden. Realer OAuth-/CRUD-/Kontentrennungstest am installierten Dienst bestanden; synthetische Konten danach gelöscht. Service `dranbleib-release`, Listener `127.0.0.1:8791`; vorherige Dienste aktiv. Keine öffentliche HTTPS-Verbindung oder ChatGPT-Verzeichnisveröffentlichung.

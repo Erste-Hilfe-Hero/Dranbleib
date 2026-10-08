@@ -31,3 +31,7 @@ Die private MVP-Demo ist umgesetzt. Eine öffentlich erreichbare ChatGPT-App ist
 ## Getrennter OAuth-Kandidat
 
 Dienst `dranbleib-release` mit eigener SQLite/Benutzer und Loopback 8791 installiert. Erste erfolgreiche Kandidatenprüfung: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37736768157. Origin `https://dranbleib.localhost` ist nur lokale Konfiguration, kein öffentlich funktionierender Endpunkt. Anmeldung, PKCE, Zustimmung und zwei getrennte Konten wurden durch den Runner am tatsächlichen Dienst geprüft. Öffentliche TLS-Adresse und echtes ChatGPT-Konto fehlen weiterhin. [Release-Details](RELEASE.md).
+
+## Abschließender Kandidatennachweis
+
+Korrigierte Version `55104624ce00511414aec6e93afa69c0e9e57cfe` am 2026-10-08 über den vorhandenen Runner installiert: https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37737261844. 15 Node-Tests, sechs Archivtests, beide Browserprüfungen und Audit bestanden. Realer OAuth-/CRUD-/Kontentrennungstest am installierten Dienst bestanden; synthetische Konten danach gelöscht. Service `dranbleib-release`, Listener `127.0.0.1:8791`; vorherige Dienste aktiv. Keine öffentliche HTTPS-Verbindung oder ChatGPT-Verzeichnisveröffentlichung.

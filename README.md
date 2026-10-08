@@ -76,3 +76,5 @@ Nicht öffentlich als ChatGPT-App veröffentlicht oder eingereicht. Für diese w
 ## Authentifizierter Release-Kandidat
 
 `PUBLIC_ORIGIN=https://dranbleib.localhost PORT=8791 npm run start:release` startet den getrennten Kandidaten mit Anmeldung und dauerhafter Kontenpersistenz. Die Beispiel-Origin dient nur der Entwicklung; TLS und eine kontrollierte öffentliche Adresse fehlen weiterhin. Discovery, DCR, S256-PKCE, Tokenrotation, Rechteprüfung, Export und bestätigte Kontolöschung sind implementiert und getestet. `npm run test:oauth-ui` prüft zusätzlich die Anmeldeformulare; dabei wird HTTPS lokal simuliert. [Start, Betrieb und Freigabegrenzen](docs/RELEASE.md).
+
+Korrigierter Kandidat auf Contabo installiert: `5510462`, Dienst `dranbleib-release`, privat `127.0.0.1:8791`. [Verifizierter Runner-Lauf](https://github.com/Erste-Hilfe-Hero/lifekit-ki-site/actions/runs/37737261844). Die ursprüngliche Browserdemo auf 8790 bleibt erreichbar. Der GitHub-Tag `v0.2.0-rc.1` kennzeichnet ausschließlich diese technische Vorabversion, keine OpenAI-Freigabe.
